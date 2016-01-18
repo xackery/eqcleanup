@@ -15,6 +15,7 @@ type Config struct {
 type Database struct {
 	Host     string `xml:"host"`
 	Port     string `xml:"port"`
+	Username string `xml:"username"`
 	Password string `xml:"password"`
 	Db       string `xml:"db"`
 }
