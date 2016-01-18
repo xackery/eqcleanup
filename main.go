@@ -25,6 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	//Cleanup soulbinder
 	err = soulbinder.Clean(db)
 	if err != nil {
 		fmt.Println("Error removing soulbinders:", err.Error())
