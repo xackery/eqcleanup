@@ -1,3 +1,4 @@
+//This script will disable soulbinders by removing their spawnentry and spawngroups with a wildcard '%soulbinder%'
 package soulbinder
 
 import (
@@ -17,12 +18,12 @@ func Clean(db *sqlx.DB) (err error) {
 		return
 	}
 	fmt.Println("Found", len(ids), "soulbinder NPC entries")
-	err = removeSoulbinderEntries(db, ids)
+	totalChanged, err := removeSoulbinderEntries(db, ids)
 	if err != nil {
 		err = fmt.Errorf("Error removing soulbinder entries: %s", err.Error())
 		return
 	}
-	fmt.Println("Removed all of them successfully.")
+	fmt.Println("Removed", totalChanged, " rows related to Soulbinder in spawnentry and spawngroup successfully.")
 	return
 }
 
@@ -46,7 +47,8 @@ func getSoulbinderIds(db *sqlx.DB) (ids []int64, err error) {
 	return
 }
 
-func removeSoulbinderEntries(db *sqlx.DB, ids []int64) (err error) {
+//Remove soulbinders by taking out spawngroups and spawn entries
+func removeSoulbinderEntries(db *sqlx.DB, ids []int64) (totalChanged int64, err error) {
 	for _, id := range ids {
 		var result sql.Result
 		var affect int64
@@ -65,6 +67,7 @@ func removeSoulbinderEntries(db *sqlx.DB, ids []int64) (err error) {
 		if affect < 1 {
 			fmt.Println("No rows affecteted delete spawngroup", id)
 		}
+		totalChanged += affect
 
 		//Remove from spawnentry
 		result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid = ?", id)
@@ -80,6 +83,7 @@ func removeSoulbinderEntries(db *sqlx.DB, ids []int64) (err error) {
 		if affect < 1 {
 			fmt.Println("No rows affected delete spawnentry", id)
 		}
+		totalChanged += affect
 	}
 	return
 }
