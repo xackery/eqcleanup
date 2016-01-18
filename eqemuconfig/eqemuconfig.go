@@ -7,6 +7,16 @@ import (
 )
 
 type Config struct {
+	Shortname string   `xml:"world>shortname"`
+	Longame   string   `xml:"world>longname"`
+	Database  Database `xml:"database"`
+}
+
+type Database struct {
+	Host     string `xml:"host"`
+	Port     string `xml:"port"`
+	Password string `xml:"password"`
+	Db       string `xml:"db"`
 }
 
 func LoadConfig() (config Config, err error) {
@@ -22,6 +32,5 @@ func LoadConfig() (config Config, err error) {
 		err = fmt.Errorf("Error decoding config: %s", err.Error())
 		return
 	}
-
 	return
 }
