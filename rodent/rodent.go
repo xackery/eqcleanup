@@ -1,13 +1,12 @@
 //This script will disable soulbinders by removing their spawnentry and spawngroups with a wildcard '%soulbinder%'
-package soulbinder
+package rodent
 
 import (
-	"database/sql"
-	"eqemuconfig"
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"os"
-	"spawngroup"
+	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqcleanup/quest"
+	"github.com/xackery/eqcleanup/spawngroup"
 )
 
 var focus = "rodent"
@@ -66,7 +65,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		"sro/Soulbinder_Silandra.pl",
 	}
 
-	delCount, err := removeQuests(config, filePaths)
+	delCount, err := quest.Remove(config, filePaths)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
