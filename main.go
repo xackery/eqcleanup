@@ -6,6 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqcleanup/rodent"
 	"github.com/xackery/eqcleanup/soulbinder"
 	"os"
 	"strings"
@@ -38,6 +39,7 @@ func showMenu() {
 	db := menuDB(&config)
 	defer db.Close()
 	fmt.Println("3) Take out Soulbinders")
+	fmt.Println("4) Take out Rodents")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -51,6 +53,12 @@ func showMenu() {
 		err = soulbinder.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing soulbinders:", err.Error())
+		}
+	}
+	if option == "4" { //Clean up Soulbinders
+		err = rodent.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing rodents:", err.Error())
 		}
 	}
 
