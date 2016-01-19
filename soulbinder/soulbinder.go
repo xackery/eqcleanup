@@ -10,7 +10,7 @@ import (
 )
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
-	ids, err := getSoulbinderIds(db)
+	ids, err := getDBIds(db)
 	if err != nil {
 		err = fmt.Errorf("Error getting soulbinder Ids: %s", err.Error())
 		return
@@ -20,7 +20,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		return
 	}
 	fmt.Println("Found", len(ids), "soulbinder NPC entries")
-	totalChanged, err := removeSoulbinderEntries(db, ids)
+	totalChanged, err := removeDBEntries(db, ids)
 	if err != nil {
 		err = fmt.Errorf("Error removing soulbinder entries: %s", err.Error())
 		return
@@ -30,6 +30,70 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	err = removeQuests(config)
 	if err != nil {
 		fmt.Println(err.Error())
+	}
+	return
+}
+
+//Get an array of soulbinder NPC ids
+func getDBIds(db *sqlx.DB) (ids []int64, err error) {
+
+	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE '%soulbinder%'")
+	if err != nil {
+		return
+	}
+
+	ids = append(ids, 3199)  //Add Romi to delete list
+	ids = append(ids, 54932) //And priestess aelea
+	//iterate results
+	for rows.Next() {
+		id := int64(0)
+		err = rows.Scan(&id)
+		if err != nil {
+			return
+		}
+		ids = append(ids, id)
+	}
+
+	return
+}
+
+//Remove soulbinders by taking out spawngroups and spawn entries
+func removeDBEntries(db *sqlx.DB, ids []int64) (totalChanged int64, err error) {
+	for _, id := range ids {
+		var result sql.Result
+		var affect int64
+		//Remove from spawngroup
+		result, err = db.Exec("DELETE FROM spawngroup WHERE id = ?", id)
+		if err != nil {
+			fmt.Println("Err removing from spawngroup:", err.Error())
+			return
+		}
+
+		affect, err = result.RowsAffected()
+		if err != nil {
+			fmt.Println("Error getting rows affected for", id, err.Error())
+			return
+		}
+		if affect < 1 {
+			fmt.Println("No rows affecteted delete spawngroup", id)
+		}
+		totalChanged += affect
+
+		//Remove from spawnentry
+		result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid = ?", id)
+		if err != nil {
+			fmt.Println("Err removing from spawnentry:", err.Error())
+			return
+		}
+		affect, err = result.RowsAffected()
+		if err != nil {
+			fmt.Println("Error getting spawnentry rows affected for", id, err.Error())
+			return
+		}
+		if affect < 1 {
+			fmt.Println("No rows affected delete spawnentry", id)
+		}
+		totalChanged += affect
 	}
 	return
 }
@@ -94,69 +158,5 @@ func removeQuests(config *eqemuconfig.Config) (err error) {
 		delCount++
 	}
 	fmt.Println("Deleted", delCount, " soulbinder related quest files")
-	return
-}
-
-//Get an array of soulbinder NPC ids
-func getSoulbinderIds(db *sqlx.DB) (ids []int64, err error) {
-
-	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE '%soulbinder%'")
-	if err != nil {
-		return
-	}
-
-	ids = append(ids, 3199)  //Add Romi to delete list
-	ids = append(ids, 54932) //And priestess aelea
-	//iterate results
-	for rows.Next() {
-		id := int64(0)
-		err = rows.Scan(&id)
-		if err != nil {
-			return
-		}
-		ids = append(ids, id)
-	}
-
-	return
-}
-
-//Remove soulbinders by taking out spawngroups and spawn entries
-func removeSoulbinderEntries(db *sqlx.DB, ids []int64) (totalChanged int64, err error) {
-	for _, id := range ids {
-		var result sql.Result
-		var affect int64
-		//Remove from spawngroup
-		result, err = db.Exec("DELETE FROM spawngroup WHERE id = ?", id)
-		if err != nil {
-			fmt.Println("Err removing from spawngroup:", err.Error())
-			return
-		}
-
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			fmt.Println("No rows affecteted delete spawngroup", id)
-		}
-		totalChanged += affect
-
-		//Remove from spawnentry
-		result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid = ?", id)
-		if err != nil {
-			fmt.Println("Err removing from spawnentry:", err.Error())
-			return
-		}
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting spawnentry rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			fmt.Println("No rows affected delete spawnentry", id)
-		}
-		totalChanged += affect
-	}
 	return
 }
