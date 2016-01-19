@@ -3,107 +3,35 @@ package soulbinder
 
 import (
 	"database/sql"
+	"eqemuconfig"
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/eqemuconfig"
 	"os"
+	"spawngroup"
 )
 
+var focus = "soulbinder"
+
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
-	ids, err := getDBIds(db)
+	ids, err := spawngroup.GetSpawnGroupIds(db, focus)
+	ids = append(ids, 3199)  //Add Romi to delete list
+	ids = append(ids, 54932) //And priestess aelea
 	if err != nil {
-		err = fmt.Errorf("Error getting soulbinder Ids: %s", err.Error())
+		err = fmt.Errorf("Error getting ", focus, " Ids: %s", err.Error())
 		return
 	}
 	if len(ids) < 1 {
-		fmt.Println("No soulbinders were found to delete")
+		fmt.Println("No ", focus, "were found to delete")
 		return
 	}
-	fmt.Println("Found", len(ids), "soulbinder NPC entries")
-	totalChanged, err := removeDBEntries(db, ids)
+	totalChanged, err := spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
 	if err != nil {
-		err = fmt.Errorf("Error removing soulbinder entries: %s", err.Error())
+		err = fmt.Errorf("Error removing", focus, "entries: %s", err.Error())
 		return
 	}
-	fmt.Println("Removed", totalChanged, " rows related to Soulbinder in spawnentry and spawngroup successfully.")
+	fmt.Println("Removed", totalChanged, " DB entries related to", focus, "in spawnentry and spawngroup successfully.")
 
-	err = removeQuests(config)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	return
-}
-
-//Get an array of soulbinder NPC ids
-func getDBIds(db *sqlx.DB) (ids []int64, err error) {
-
-	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE '%soulbinder%'")
-	if err != nil {
-		return
-	}
-
-	ids = append(ids, 3199)  //Add Romi to delete list
-	ids = append(ids, 54932) //And priestess aelea
-	//iterate results
-	for rows.Next() {
-		id := int64(0)
-		err = rows.Scan(&id)
-		if err != nil {
-			return
-		}
-		ids = append(ids, id)
-	}
-
-	return
-}
-
-//Remove soulbinders by taking out spawngroups and spawn entries
-func removeDBEntries(db *sqlx.DB, ids []int64) (totalChanged int64, err error) {
-	for _, id := range ids {
-		var result sql.Result
-		var affect int64
-		//Remove from spawngroup
-		result, err = db.Exec("DELETE FROM spawngroup WHERE id = ?", id)
-		if err != nil {
-			fmt.Println("Err removing from spawngroup:", err.Error())
-			return
-		}
-
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			fmt.Println("No rows affecteted delete spawngroup", id)
-		}
-		totalChanged += affect
-
-		//Remove from spawnentry
-		result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid = ?", id)
-		if err != nil {
-			fmt.Println("Err removing from spawnentry:", err.Error())
-			return
-		}
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting spawnentry rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			fmt.Println("No rows affected delete spawnentry", id)
-		}
-		totalChanged += affect
-	}
-	return
-}
-
-func removeQuests(config *eqemuconfig.Config) (err error) {
-	if config.QuestsDir == "" {
-		err = fmt.Errorf("Quests directory is not set.")
-		return
-	}
-	soulbinders := []string{
+	filePaths := []string{
 		"abysmal/Soulbinder_Jerlin.pl",
 		"cabeast/Soulbinder_Shakar.pl",
 		"commonlands/Soulbinder_Jubbl.pl",
@@ -137,26 +65,11 @@ func removeQuests(config *eqemuconfig.Config) (err error) {
 		"southro/Soulbinder_Silandra.pl",
 		"sro/Soulbinder_Silandra.pl",
 	}
-	delCount := 0
-	for _, filename := range soulbinders {
-		curFile := config.QuestsDir + "/" + filename
-		_, err = os.Stat(curFile)
 
-		if err != nil {
-			if os.IsNotExist(err) {
-				continue
-			}
-			fmt.Printf("Error finding %s: %s", curFile, err.Error())
-			continue
-		}
-
-		err = os.Remove(curFile)
-		if err != nil {
-			fmt.Printf("Error deleting %s: %s", curFile, err.Error())
-			continue
-		}
-		delCount++
+	delCount, err := removeQuests(config, filePaths)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
-	fmt.Println("Deleted", delCount, " soulbinder related quest files")
+	fmt.Println("Deleted", delCount, focus, "related quest files")
 	return
 }
