@@ -48,8 +48,8 @@ func removeQuests(config *eqemuconfig.Config) (err error) {
 		"everfrost/Soulbinder_Garnog.pl",
 		"firiona/Soulbinder_Tardon.pl",
 		"gfaydark/Soulbinder_Oakstout.pl",
-		//"guildlobby/High_Priest_of_Luclin.pl",
-		//"guildlobby/High_Priestess_of_Luclin.pl",
+		"guildlobby/High_Priest_of_Luclin.pl",
+		"guildlobby/High_Priestess_of_Luclin.pl",
 		"gukta/Soulbinder_Snog.pl",
 		"gukta/Soulbinder_Zlippi.pl",
 		"gunthak/Soulbinder_Karyin.pl",
@@ -57,7 +57,7 @@ func removeQuests(config *eqemuconfig.Config) (err error) {
 		"kaladima/Soulbinder_Torvald.pl",
 		"neriaka/Soulbinder_Nola_Z-Ret.pl",
 		"neriaka/Soulbinder_Novalu.pl",
-		"northkarana/Romi.pl", //This is a soulbinder, odd.
+		"northkarana/Romi.pl",
 		"northro/Soulbinder_Ragni.pl",
 		"nro/Soulbinder_Ragni.pl",
 		"oggok/Soulbinder_Trurg.pl",
@@ -93,7 +93,7 @@ func removeQuests(config *eqemuconfig.Config) (err error) {
 		}
 		delCount++
 	}
-	fmt.Println("Deleted", delCount, "Quest files in quests")
+	fmt.Println("Deleted", delCount, " soulbinder related quest files")
 	return
 }
 
@@ -104,6 +104,9 @@ func getSoulbinderIds(db *sqlx.DB) (ids []int64, err error) {
 	if err != nil {
 		return
 	}
+
+	ids = append(ids, 3199)  //Add Romi to delete list
+	ids = append(ids, 54932) //And priestess aelea
 	//iterate results
 	for rows.Next() {
 		id := int64(0)
