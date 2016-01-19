@@ -48,7 +48,7 @@ func showMenu() {
 		os.Exit(0)
 	}
 	if option == "3" { //Clean up Soulbinders
-		err = soulbinder.Clean(db)
+		err = soulbinder.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing soulbinders:", err.Error())
 		}

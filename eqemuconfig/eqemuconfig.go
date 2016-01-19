@@ -10,6 +10,7 @@ type Config struct {
 	Shortname string   `xml:"world>shortname"`
 	Longame   string   `xml:"world>longname"`
 	Database  Database `xml:"database"`
+	QuestsDir string   `xml:"directories>quests"`
 }
 
 type Database struct {
@@ -32,6 +33,9 @@ func LoadConfig() (config Config, err error) {
 	if err != nil {
 		err = fmt.Errorf("Error decoding config: %s", err.Error())
 		return
+	}
+	if config.QuestsDir == "" {
+		config.QuestsDir = "quests"
 	}
 	return
 }

@@ -5,9 +5,11 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	"github.com/xackery/eqcleanup/eqemuconfig"
+	"os"
 )
 
-func Clean(db *sqlx.DB) (err error) {
+func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	ids, err := getSoulbinderIds(db)
 	if err != nil {
 		err = fmt.Errorf("Error getting soulbinder Ids: %s", err.Error())
@@ -24,6 +26,74 @@ func Clean(db *sqlx.DB) (err error) {
 		return
 	}
 	fmt.Println("Removed", totalChanged, " rows related to Soulbinder in spawnentry and spawngroup successfully.")
+
+	err = removeQuests(config)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return
+}
+
+func removeQuests(config *eqemuconfig.Config) (err error) {
+	if config.QuestsDir == "" {
+		err = fmt.Errorf("Quests directory is not set.")
+		return
+	}
+	soulbinders := []string{
+		"abysmal/Soulbinder_Jerlin.pl",
+		"cabeast/Soulbinder_Shakar.pl",
+		"commonlands/Soulbinder_Jubbl.pl",
+		"crescent/Priestess_Aelea.pl",
+		"ecommons/Soulbinder_Jubbl.pl",
+		"everfrost/Soulbinder_Garnog.pl",
+		"firiona/Soulbinder_Tardon.pl",
+		"gfaydark/Soulbinder_Oakstout.pl",
+		//"guildlobby/High_Priest_of_Luclin.pl",
+		//"guildlobby/High_Priestess_of_Luclin.pl",
+		"gukta/Soulbinder_Snog.pl",
+		"gukta/Soulbinder_Zlippi.pl",
+		"gunthak/Soulbinder_Karyin.pl",
+		"iceclad/Soulbinder_Cubnitskin.pl",
+		"kaladima/Soulbinder_Torvald.pl",
+		"neriaka/Soulbinder_Nola_Z-Ret.pl",
+		"neriaka/Soulbinder_Novalu.pl",
+		"northkarana/Romi.pl", //This is a soulbinder, odd.
+		"northro/Soulbinder_Ragni.pl",
+		"nro/Soulbinder_Ragni.pl",
+		"oggok/Soulbinder_Trurg.pl",
+		"overthere/Soulbinder_Kardin.pl",
+		"paineel/Soulbinder_Tomas.pl",
+		//"plugins/default-actions.pl", //There is a soulbinder flag here, ignoring though
+		"plugins/soulbinders.pl",
+		"poknowledge/Soulbinder_Jera.pl",
+		"potranquility/Soulbinder_Derith.pl",
+		"rathemtn/Soulbinder_Zlippi.pl",
+		"shadowhaven/Soulbinder_Nansin.pl",
+		"sharvahl/Soulbinder_Ghula.pl",
+		"southro/Soulbinder_Silandra.pl",
+		"sro/Soulbinder_Silandra.pl",
+	}
+	delCount := 0
+	for _, filename := range soulbinders {
+		curFile := config.QuestsDir + "/" + filename
+		_, err = os.Stat(curFile)
+
+		if err != nil {
+			if os.IsNotExist(err) {
+				continue
+			}
+			fmt.Printf("Error finding %s: %s", curFile, err.Error())
+			continue
+		}
+
+		err = os.Remove(curFile)
+		if err != nil {
+			fmt.Printf("Error deleting %s: %s", curFile, err.Error())
+			continue
+		}
+		delCount++
+	}
+	fmt.Println("Deleted", delCount, "Quest files in quests")
 	return
 }
 
