@@ -6,8 +6,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqcleanup/priests"
 	"github.com/xackery/eqcleanup/rodent"
 	"github.com/xackery/eqcleanup/soulbinder"
+	"github.com/xackery/eqcleanup/spells"
 	"github.com/xackery/eqcleanup/tribute"
 	"github.com/xackery/eqcleanup/trickortreat"
 	"os"
@@ -45,6 +47,7 @@ func showMenu() {
 	fmt.Println("5) Delete Trick or Treat Quests")
 	fmt.Println("6) Delete Tribute Masters")
 	fmt.Println("7) Delete All spells, tomes (scribable items)")
+	fmt.Println("8) Delete Priests of Discord")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -74,9 +77,14 @@ func showMenu() {
 			fmt.Println("Error removing tribute:", err.Error())
 		}
 	} else if option == "7" {
-		err = tribute.Clean(db, &config)
+		err = spells.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing spells:", err.Error())
+		}
+	} else if option == "8" {
+		err = priests.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing priest of discords:", err.Error())
 		}
 	}
 	return

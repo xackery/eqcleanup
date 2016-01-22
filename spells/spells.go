@@ -6,7 +6,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/item"
-	"github.com/xackery/eqcleanup/quest"
 )
 
 var focus = "spells"
@@ -30,7 +29,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		ids = append(ids, id)
 	}
 
-	totalChanged, err = item.RemoveAllInstancesOfItems(db, ids)
+	totalChanged, err := item.RemoveAllInstancesOfItems(db, ids)
 	if err != nil {
 		return
 	}
