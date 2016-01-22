@@ -8,6 +8,7 @@ import (
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/rodent"
 	"github.com/xackery/eqcleanup/soulbinder"
+	"github.com/xackery/eqcleanup/tribute"
 	"github.com/xackery/eqcleanup/trickortreat"
 	"os"
 	"strings"
@@ -42,6 +43,7 @@ func showMenu() {
 	fmt.Println("3) Delete Soulbinders")
 	fmt.Println("4) Delete Rodents")
 	fmt.Println("5) Delete Trick or Treat Quests")
+	fmt.Println("6) Delete Tribute Masters")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -64,6 +66,11 @@ func showMenu() {
 		err = trickortreat.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing trick or treat:", err.Error())
+		}
+	} else if option == "6" {
+		err = tribute.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing tribute:", err.Error())
 		}
 	}
 	return
