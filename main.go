@@ -51,6 +51,7 @@ func showMenu() {
 	fmt.Println("7) Delete All spells, tomes (scribable items)")
 	fmt.Println("8) Delete Priests of Discord")
 	fmt.Println("9) Delete Defiant Armor")
+	fmt.Println("10) Delete LDON Npcs")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
