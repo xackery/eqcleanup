@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqcleanup/ldon"
 	"github.com/xackery/eqcleanup/priests"
 	"github.com/xackery/eqcleanup/rodent"
 	"github.com/xackery/eqcleanup/soulbinder"
@@ -92,6 +93,11 @@ func showMenu() {
 		err = defiant.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing defiant:", err.Error())
+		}
+	} else if option == "10" {
+		err = ldon.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing ldon:", err.Error())
 		}
 	}
 	return
