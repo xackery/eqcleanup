@@ -8,6 +8,7 @@ import (
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/rodent"
 	"github.com/xackery/eqcleanup/soulbinder"
+	"github.com/xackery/eqcleanup/trickortreat"
 	"os"
 	"strings"
 )
@@ -38,8 +39,9 @@ func showMenu() {
 	config := menuConfig()
 	db := menuDB(&config)
 	defer db.Close()
-	fmt.Println("3) Take out Soulbinders")
-	fmt.Println("4) Take out Rodents")
+	fmt.Println("3) Delete Soulbinders")
+	fmt.Println("4) Delete Rodents")
+	fmt.Println("5) Delete Trick or Treat Quests")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -48,20 +50,22 @@ func showMenu() {
 	if option == "q" || option == "exit" {
 		fmt.Println("Exiting")
 		os.Exit(0)
-	}
-	if option == "3" { //Clean up Soulbinders
+	} else if option == "3" { //Clean up Soulbinders
 		err = soulbinder.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing soulbinders:", err.Error())
 		}
-	}
-	if option == "4" { //Clean up Soulbinders
+	} else if option == "4" {
 		err = rodent.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing rodents:", err.Error())
 		}
+	} else if option == "5" {
+		err = trickortreat.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing trick or treat:", err.Error())
+		}
 	}
-
 	return
 }
 
