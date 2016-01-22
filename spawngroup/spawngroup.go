@@ -6,9 +6,28 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func GetSpawnGroupIds(db *sqlx.DB, wildcard string) (ids []int64, err error) {
+func GetSpawnGroupIdsByNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, err error) {
 
 	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE '%?%'", wildcard)
+	if err != nil {
+		return
+	}
+
+	//iterate results
+	for rows.Next() {
+		id := int64(0)
+		err = rows.Scan(&id)
+		if err != nil {
+			return
+		}
+		ids = append(ids, id)
+	}
+	return
+}
+
+func GetSpawnGroupIdsByClass(db *sqlx.DB, class int64) (ids []int64, err error) {
+
+	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.class = ?", class)
 	if err != nil {
 		return
 	}

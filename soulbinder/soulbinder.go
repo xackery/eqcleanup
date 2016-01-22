@@ -12,7 +12,7 @@ import (
 var focus = "soulbinder"
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
-	ids, err := spawngroup.GetSpawnGroupIds(db, focus)
+	ids, err := spawngroup.GetSpawnGroupIdsByNameWildcard(db, focus)
 	ids = append(ids, 3199)  //Add Romi to delete list
 	ids = append(ids, 54932) //And priestess aelea
 	if err != nil {

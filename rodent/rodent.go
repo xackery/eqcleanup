@@ -12,7 +12,7 @@ import (
 var focus = "rodent"
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
-	ids, err := spawngroup.GetSpawnGroupIds(db, "a_rodent")
+	ids, err := spawngroup.GetSpawnGroupIdsByNameWildcard(db, "a_rodent")
 	if err != nil {
 		err = fmt.Errorf("Error getting ", focus, " Ids: %s", err.Error())
 		return
@@ -23,7 +23,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	}
 
 	//Exterminators
-	extids, err := spawngroup.GetSpawnGroupIds(db, "exterminator_")
+	extids, err := spawngroup.GetSpawnGroupIdsByNameWildcard(db, "exterminator_")
 	if err != nil {
 		err = fmt.Errorf("Error getting exterminator Ids: %s", err.Error())
 		return
