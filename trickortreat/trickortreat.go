@@ -5,12 +5,25 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqcleanup/item"
 	"github.com/xackery/eqcleanup/quest"
 )
 
 var focus = "trick or treat"
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
+	ids := []int64{
+		84084, //Gummie Kobolds
+		84088, //rock candy
+
+		84091, //sand
+		84092, //chunk of coal
+		84093, //pocket lint
+		84094, //Draykey's Codex
+		84095, //Trick or treat bag
+
+	}
+	item.RemoveAllInstancesOfItems(db, ids)
 
 	filePaths := []string{
 		"befallen/Wraps_McGee.lua",
