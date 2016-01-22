@@ -23,7 +23,11 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		84095, //Trick or treat bag
 
 	}
-	item.RemoveAllInstancesOfItems(db, ids)
+	totalChanged, err := item.RemoveAllInstancesOfItems(db, ids)
+	if err != nil {
+		return
+	}
+	fmt.Println("Removed", totalChanged, " DB entries related to", focus, "in all player-accessible item locations.")
 
 	filePaths := []string{
 		"befallen/Wraps_McGee.lua",
