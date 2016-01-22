@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/priests"
 	"github.com/xackery/eqcleanup/rodent"
@@ -48,6 +49,7 @@ func showMenu() {
 	fmt.Println("6) Delete Tribute Masters")
 	fmt.Println("7) Delete All spells, tomes (scribable items)")
 	fmt.Println("8) Delete Priests of Discord")
+	fmt.Println("9) Delete Defiant Armor")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -85,6 +87,11 @@ func showMenu() {
 		err = priests.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing priest of discords:", err.Error())
+		}
+	} else if option == "9" {
+		err = defiant.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing defiant:", err.Error())
 		}
 	}
 	return
