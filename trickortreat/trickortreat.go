@@ -7,12 +7,20 @@ import (
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/item"
 	"github.com/xackery/eqcleanup/quest"
+	"github.com/xackery/eqcleanup/spawngroup"
 )
 
 var focus = "trick or treat"
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
-	ids := []int64{
+	//Mobs
+	ids := []int64{}
+	//#checkpoint_ten
+
+	spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
+
+	//Items
+	ids = []int64{
 		84084, //Gummie Kobolds
 		84088, //rock candy
 
@@ -46,6 +54,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		"tox/Fuzz_Selppa.pl",
 		"toxxulia/Fuzz_Selppa.pl",
 		"unrest/Crabby_the_Rotten.pl",
+		"nektulos/#checkpoint_ten.pl", //trick or treat stop
 	}
 
 	delCount, err := quest.Remove(config, filePaths)
