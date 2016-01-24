@@ -20,7 +20,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		return
 	}
 	if len(ids) < 1 {
-		fmt.Println("No ", focus, "were found to delete")
+		fmt.Println("No", focus, "were found to delete")
 		return
 	}
 	totalChanged, err := spawngroup.RemoveSpawnGroupAndEntryById(db, ids)

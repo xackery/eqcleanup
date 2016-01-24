@@ -63,7 +63,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 			return
 		}
 		if affect < 1 {
-			fmt.Println("No rows affecteted delete spawngroup", id)
+			//fmt.Println("No rows affecteted delete spawngroup", id)
 		}
 		totalRemoved += affect
 
@@ -79,7 +79,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 			return
 		}
 		if affect < 1 {
-			fmt.Println("No rows affected delete spawnentry", id)
+			//fmt.Println("No rows affected delete spawnentry", id)
 		}
 		totalRemoved += affect
 
@@ -87,7 +87,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 
 		result, err = db.Exec("DELETE FROM spawn2 WHERE spawngroupid = ?", id)
 		if err != nil {
-			fmt.Println("Err removing from spawngroupid:", err.Error())
+			//fmt.Println("Err removing from spawngroupid:", err.Error())
 			return
 		}
 		affect, err = result.RowsAffected()
@@ -96,7 +96,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 			return
 		}
 		if affect < 1 {
-			fmt.Println("No rows affected delete spawngroupid", id)
+			//fmt.Println("No rows affected delete spawngroupid", id)
 		}
 		totalRemoved += affect
 

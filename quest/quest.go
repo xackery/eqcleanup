@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"os"
+	"strings"
 )
 
 func Remove(config *eqemuconfig.Config, filePaths []string) (delCount int, err error) {
@@ -16,7 +17,9 @@ func Remove(config *eqemuconfig.Config, filePaths []string) (delCount int, err e
 		_, err = os.Stat(curFile)
 
 		if err != nil {
-			if os.IsNotExist(err) {
+
+			if os.IsNotExist(err) || strings.Contains(err.Error(), "no such file") {
+				err = nil
 				continue
 			}
 			fmt.Printf("Error finding %s: %s", curFile, err.Error())
@@ -30,5 +33,6 @@ func Remove(config *eqemuconfig.Config, filePaths []string) (delCount int, err e
 		}
 		delCount++
 	}
+	err = nil
 	return
 }
