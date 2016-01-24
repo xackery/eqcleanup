@@ -8,7 +8,9 @@ import (
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/ldon"
+	"github.com/xackery/eqcleanup/nexus"
 	"github.com/xackery/eqcleanup/priests"
+	"github.com/xackery/eqcleanup/rainsnow"
 	"github.com/xackery/eqcleanup/rodent"
 	"github.com/xackery/eqcleanup/soulbinder"
 	"github.com/xackery/eqcleanup/spells"
@@ -52,7 +54,8 @@ func showMenu() {
 	fmt.Println("8) Delete Priests of Discord")
 	fmt.Println("9) Delete Defiant Armor")
 	fmt.Println("10) Delete LDON Npcs")
-	fmt.Println("11) Delete Newbie Armor")
+	fmt.Println("11) Delete Nexus portal NPCs")
+	fmt.Println("12) Disable Rain and Snow")
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -100,6 +103,16 @@ func showMenu() {
 		err = ldon.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing ldon:", err.Error())
+		}
+	} else if option == "11" {
+		err = nexus.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing nexus:", err.Error())
+		}
+	} else if option == "12" {
+		err = rainsnow.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing rain and snow:", err.Error())
 		}
 	}
 	return
