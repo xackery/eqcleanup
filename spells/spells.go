@@ -32,6 +32,45 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		3152,
 		//Necro
 		3154,
+		//Neriakb
+		//wiz
+		3127, //riv
+		3122, //tal
+		3130,
+		3129,
+		3121,
+		3124,
+		3125,
+		3132,
+		3131,
+		3133,
+		3128,
+		3119,
+		3123,
+		//rivervale
+		7706, //ilscent
+		5674, //bumpy
+		//staria
+		5686, //fralith
+		5676, //torth
+		//akanon
+		48152,
+		48151,
+		48150,
+		48158,
+		7159,
+		7160,
+		//gfay
+		1523,
+		1522,
+		//grobb
+		5581,
+		3480,
+		5582,
+		5558,
+		5591,
+		5615,
+		5628,
 	}
 	totalChanged, err := spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
 	if err != nil {
@@ -57,10 +96,11 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		ids = append(ids, id)
 	}
 
-	totalChanged, err := item.RemoveAllInstancesOfItems(db, ids)
+	moreChanged, err := item.RemoveAllInstancesOfItems(db, ids)
 	if err != nil {
 		return
 	}
+	totalChanged += moreChanged
 	fmt.Println("Removed", totalChanged, " DB entries related to", focus, "in all player-accessible item locations.")
 	return
 }
