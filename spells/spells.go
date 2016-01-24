@@ -13,6 +13,7 @@ var focus = "spells"
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	//Find all item IDS
 
+	fmt.Println("This script takes a while...")
 	ids := []int64{}
 	rows, err := db.Query("SELECT id FROM items WHERE scrolleffect > 0")
 	if err != nil {
