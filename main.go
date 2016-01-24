@@ -38,24 +38,32 @@ func connectDB(config *eqemuconfig.Config) (db *sqlx.DB, err error) {
 	return
 }
 
+var isDBConnected bool
+var isConfigLoaded bool
+
 func showMenu() {
 	var err error
 	var option string
 	fmt.Println("\n\n===EQ Cleanup===")
+	fmt.Println("Remember: Always back up before using this tool!")
 	fmt.Println("Choose an option:")
 	config := menuConfig()
 	db := menuDB(&config)
 	defer db.Close()
-	fmt.Println("3) Delete Soulbinders")
-	fmt.Println("4) Delete Rodents")
-	fmt.Println("5) Delete Trick or Treat Quests")
-	fmt.Println("6) Delete Tribute Masters")
-	fmt.Println("7) Delete All spells, tomes (scribable items)")
-	fmt.Println("8) Delete Priests of Discord")
-	fmt.Println("9) Delete Defiant Armor")
-	fmt.Println("10) Delete LDON Npcs")
-	fmt.Println("11) Delete Nexus portal NPCs")
-	fmt.Println("12) Disable Rain and Snow")
+	if isDBConnected && isConfigLoaded {
+		fmt.Println("3) Delete Soulbinders")
+		fmt.Println("4) Delete Rodents")
+		fmt.Println("5) Delete Trick or Treat Quests")
+		fmt.Println("6) Delete Tribute Masters")
+		fmt.Println("7) Delete All spells, tomes (scribable items)")
+		fmt.Println("8) Delete Priests of Discord")
+		fmt.Println("9) Delete Defiant Armor")
+		fmt.Println("10) Delete LDON Npcs")
+		fmt.Println("11) Delete Nexus portal NPCs")
+		fmt.Println("12) Disable Rain and Snow")
+	} else {
+		fmt.Println("-Commands are disabled until database and config is good-")
+	}
 	fmt.Println("Q) Quit")
 
 	fmt.Scan(&option)
@@ -64,7 +72,12 @@ func showMenu() {
 	if option == "q" || option == "exit" {
 		fmt.Println("Exiting")
 		os.Exit(0)
-	} else if option == "3" { //Clean up Soulbinders
+	}
+
+	if !isDBConnected || !isConfigLoaded {
+		return
+	}
+	if option == "3" { //Clean up Soulbinders
 		err = soulbinder.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing soulbinders:", err.Error())
@@ -122,8 +135,10 @@ func menuConfig() (config eqemuconfig.Config) {
 	config, err := eqemuconfig.LoadConfig()
 	status := "Good"
 	if err != nil {
+		isConfigLoaded = false
 		status = fmt.Sprintf("Bad (%s)", err.Error())
 	} else {
+		isConfigLoaded = true
 		status = fmt.Sprintf("Good (%s)", config.Longame)
 	}
 	fmt.Printf("1) Reload eqemu_config.xml (Status: %s)\n", status)
@@ -135,7 +150,10 @@ func menuDB(config *eqemuconfig.Config) (db *sqlx.DB) {
 	db, err = connectDB(config)
 	status := "Good"
 	if err != nil {
+		isDBConnected = false
 		status = fmt.Sprintf("Bad (%s)", err.Error())
+	} else {
+		isDBConnected = true
 	}
 	fmt.Printf("2) Test DB Connection Settings (Status: %s)\n", status)
 	return
