@@ -10,158 +10,158 @@ import (
 func RemoveAllInstancesOfItems(db *sqlx.DB, ids []int64) (totalRemoved int64, err error) {
 	for _, id := range ids {
 		var affect int64
-		affect, err = DeleteQuery(db, "DELETE FROM inventory i WHERE i.itemid = ?", id, "inventory")
+		affect, err = DeleteQuery(db, "DELETE FROM inventory WHERE itemid = ?", id, "inventory")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM lootdrop_entries le WHERE le.item_id = ?", id, "lootdrop entries")
+		affect, err = DeleteQuery(db, "DELETE FROM lootdrop_entries WHERE item_id = ?", id, "lootdrop entries")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM merchantlist ml WHERE ml.item_id = ?", id, "merchant list")
+		affect, err = DeleteQuery(db, "DELETE FROM merchantlist WHERE item_id = ?", id, "merchant list")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM merchantlist_temp ml WHERE ml.item_id = ?", id, "merchant list")
+		affect, err = DeleteQuery(db, "DELETE FROM merchantlist_temp WHEREitem_id = ?", id, "merchant list")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM guild_bank gb WHERE gb.itemid = ?", id, "guild bank")
+		affect, err = DeleteQuery(db, "DELETE FROM guild_bank WHERE itemid = ?", id, "guild bank")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM ground_spawns gs WHERE gs.item = ?", id, "ground spawn")
+		affect, err = DeleteQuery(db, "DELETE FROM ground_spawns WHERE item = ?", id, "ground spawn")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
 		//Delete any tradeskill recipes that use this as a reagent
-		affect, err = DeleteQuery(db, "DELETE FROM tradeskill_recipe tr WHERE tr.id IN (SELECT recipe_id FROM tradeskill_recipe_entries tre WHERE tre.item_id = ?)", id, "tradeskill recipes")
+		affect, err = DeleteQuery(db, "DELETE FROM tradeskill_recipe WHERE tradeskill_recipe.id IN (SELECT recipe_id FROM tradeskill_recipe_entries WHERE tradeskill_recipe_entries.item_id = ?)", id, "tradeskill recipes")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM sharedbank sb WHERE sb.itemid  = ?)", id, "shared bank")
+		affect, err = DeleteQuery(db, "DELETE FROM sharedbank WHERE itemid  = ?)", id, "shared bank")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM forage f WHERE f.itemid  = ?)", id, "forage")
+		affect, err = DeleteQuery(db, "DELETE FROM forage WHERE itemid  = ?)", id, "forage")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM merc_inventory mi WHERE mi.item_id  = ?)", id, "merc inventory")
+		affect, err = DeleteQuery(db, "DELETE FROM merc_inventory WHERE item_id  = ?)", id, "merc inventory")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM tradeskill_recipe_entries tre WHERE tre.item_id = ?)", id, "tradeskill recipe entries")
+		affect, err = DeleteQuery(db, "DELETE FROM tradeskill_recipe_entries WHERE item_id = ?)", id, "tradeskill recipe entries")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM buyer b WHERE b.itemid = ?)", id, "buyer")
+		affect, err = DeleteQuery(db, "DELETE FROM buyer WHERE itemid = ?)", id, "buyer")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM character_bandolier cb WHERE cb.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM character_bandolier WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM character_corpse_items cci WHERE cci.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM character_corpse_items WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM character_pet_inventory cpi WHERE cpi.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM character_pet_inventory WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM character_potionbelt cp WHERE cp.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM character_potionbelt WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM fishing f WHERE f.itemid = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM fishing WHERE itemid = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM item_tick it WHERE it.it_itemid = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM item_tick WHERE it_itemid = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM keyring k WHERE k.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM keyring WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM object_contents oc WHERE oc.itemid = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM object_contents WHERE itemid = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM pet_equipmentset_entries pee WHERE pee.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM pet_equipmentset_entries WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM starting_items si WHERE si.itemid = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM starting_items WHERE itemid = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM tasks t WHERE t.rewardid = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM tasks WHERE rewardid = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM titles t WHERE t.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM titles WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM trader t WHERE t.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM trader WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
 		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM veteran_reward_templates vrt WHERE vrt.item_id = ?)", id, "bandolier")
+		affect, err = DeleteQuery(db, "DELETE FROM veteran_reward_templates WHERE item_id = ?)", id, "bandolier")
 		if err != nil {
 			return
 		}
