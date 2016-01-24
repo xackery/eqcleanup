@@ -14,7 +14,7 @@ var focus = "rodent"
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	ids, err := spawngroup.GetSpawnGroupIdsByNameWildcard(db, "a_rodent")
 	if err != nil {
-		err = fmt.Errorf("Error getting ", focus, " Ids: %s", err.Error())
+		err = fmt.Errorf("Error getting %s Ids: %s", focus, err.Error())
 		return
 	}
 	if len(ids) < 1 {

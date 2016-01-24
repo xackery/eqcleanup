@@ -15,7 +15,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	//Remove Adventure Merchants
 	ids, err := spawngroup.GetSpawnGroupIdsByClass(db, 61)
 	if err != nil {
-		err = fmt.Errorf("Error getting ", focus, " Ids: %s", err.Error())
+		err = fmt.Errorf("Error getting %s Ids: %s", focus, err.Error())
 		return
 	}
 

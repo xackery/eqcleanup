@@ -16,7 +16,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	ids = append(ids, 3199)  //Add Romi to delete list
 	ids = append(ids, 54932) //And priestess aelea
 	if err != nil {
-		err = fmt.Errorf("Error getting ", focus, " Ids: %s", err.Error())
+		err = fmt.Errorf("Error getting %s Ids: %s", focus, err.Error())
 		return
 	}
 	if len(ids) < 1 {
