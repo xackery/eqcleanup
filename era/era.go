@@ -9,12 +9,19 @@ import (
 	"os"
 )
 
+/*
 //skyfire
-//50386 Flawed Combatant's Hoe
-//50396
-//46178
-//46177
+50386, //Flawed Combatant's Hoe
+50396,
+46178,
+46177,
+17592, //fleshthreaded satchel
 //gfaydark - crude/newbie
+*/
+
+/*out of era mobs
+5782, //tsoma in neriakb
+*/
 
 /*
 SELECT id, NAME, ac, hp, mana, astr, asta FROM items WHERE id IN (
