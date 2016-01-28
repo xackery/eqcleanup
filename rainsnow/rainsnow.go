@@ -4,7 +4,7 @@ package rainsnow
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqemuconfig"
 )
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {

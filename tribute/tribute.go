@@ -4,8 +4,8 @@ package tribute
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/spawngroup"
+	"github.com/xackery/eqemuconfig"
 )
 
 var focus = "tribute"

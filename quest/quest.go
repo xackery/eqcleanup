@@ -2,7 +2,7 @@ package quest
 
 import (
 	"fmt"
-	"github.com/xackery/eqcleanup/eqemuconfig"
+	"github.com/xackery/eqemuconfig"
 	"os"
 	"strings"
 )

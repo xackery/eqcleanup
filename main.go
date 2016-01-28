@@ -6,7 +6,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/defiant"
-	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/ldon"
 	"github.com/xackery/eqcleanup/nexus"
 	"github.com/xackery/eqcleanup/priests"
@@ -16,6 +15,7 @@ import (
 	"github.com/xackery/eqcleanup/spells"
 	"github.com/xackery/eqcleanup/tribute"
 	"github.com/xackery/eqcleanup/trickortreat"
+	"github.com/xackery/eqemuconfig"
 	"os"
 	"strings"
 )

@@ -4,8 +4,8 @@ package defiant
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/eqemuconfig"
 	"github.com/xackery/eqcleanup/item"
+	"github.com/xackery/eqemuconfig"
 )
 
 var focus = "defiant"
