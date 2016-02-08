@@ -28,7 +28,7 @@ func GetSpawnGroupIdsByNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, 
 
 func GetSpawnGroupIdsByLastNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, err error) {
 
-	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE ?", "%"+wildcard+"%")
+	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.lastname LIKE ?", "%"+wildcard+"%")
 	if err != nil {
 		fmt.Println("Error initial")
 		return
