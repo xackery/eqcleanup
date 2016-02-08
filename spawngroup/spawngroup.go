@@ -26,6 +26,26 @@ func GetSpawnGroupIdsByNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, 
 	return
 }
 
+func GetSpawnGroupIdsByEmptyMerchant(db *sqlx.DB) (ids []int64, err error) {
+
+	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.merchant_id > 0 AND nt.merchant_id not in (select merchantid from merchantlist)")
+	if err != nil {
+		fmt.Println("Error initial")
+		return
+	}
+
+	//iterate results
+	for rows.Next() {
+		id := int64(0)
+		err = rows.Scan(&id)
+		if err != nil {
+			return
+		}
+		ids = append(ids, id)
+	}
+	return
+}
+
 func GetSpawnGroupIdsByLastNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, err error) {
 
 	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.lastname LIKE ?", "%"+wildcard+"%")
