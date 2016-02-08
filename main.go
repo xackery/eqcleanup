@@ -11,6 +11,7 @@ import (
 	"github.com/xackery/eqcleanup/priests"
 	"github.com/xackery/eqcleanup/rainsnow"
 	"github.com/xackery/eqcleanup/rodent"
+	"github.com/xackery/eqcleanup/shadowrest"
 	"github.com/xackery/eqcleanup/soulbinder"
 	"github.com/xackery/eqcleanup/spells"
 	"github.com/xackery/eqcleanup/tribute"
@@ -61,6 +62,7 @@ func showMenu() {
 		fmt.Println("10) Delete LDON Npcs")
 		fmt.Println("11) Delete Nexus portal NPCs")
 		fmt.Println("12) Disable Rain and Snow")
+		fmt.Println("13) Delete Emissary of Shadorest NPCs")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -124,6 +126,11 @@ func showMenu() {
 		}
 	} else if option == "12" {
 		err = rainsnow.Clean(db, &config)
+		if err != nil {
+			fmt.Println("Error removing rain and snow:", err.Error())
+		}
+	} else if option == "13" {
+		err = shadowrest.Clean(db, &config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}
