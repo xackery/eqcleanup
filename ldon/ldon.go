@@ -65,7 +65,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	}
 
 	//other misc npcs
-	rids = []int64{6714, 694, 4700, 4699, 4694, 4704}
+	rids = []int64{6714, 694, 4700, 4699, 4694, 4704, 978, 984, 985}
 	for _, id := range rids {
 		ids = append(ids, id)
 	}
