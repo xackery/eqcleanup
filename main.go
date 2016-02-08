@@ -63,7 +63,7 @@ func showMenu() {
 		fmt.Println("10) Delete LDON Npcs")
 		fmt.Println("11) Delete Nexus portal NPCs")
 		fmt.Println("12) Disable Rain and Snow")
-		fmt.Println("13) Delete Emissary of Shadorest NPCs")
+		fmt.Println("13) Delete Emissary of Shadowrest NPCs")
 		fmt.Println("14) Delete Empty Merchant NPCs")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
