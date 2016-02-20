@@ -50,7 +50,7 @@ func showMenu() {
 	fmt.Println("Remember: Always back up before using this tool!")
 	fmt.Println("Choose an option:")
 	config := menuConfig()
-	db := menuDB(&config)
+	db := menuDB(config)
 	defer db.Close()
 	if isDBConnected && isConfigLoaded {
 		fmt.Println("3) Delete Soulbinders")
@@ -82,62 +82,62 @@ func showMenu() {
 		return
 	}
 	if option == "3" { //Clean up Soulbinders
-		err = soulbinder.Clean(db, &config)
+		err = soulbinder.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing soulbinders:", err.Error())
 		}
 	} else if option == "4" {
-		err = rodent.Clean(db, &config)
+		err = rodent.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rodents:", err.Error())
 		}
 	} else if option == "5" {
-		err = trickortreat.Clean(db, &config)
+		err = trickortreat.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing trick or treat:", err.Error())
 		}
 	} else if option == "6" {
-		err = tribute.Clean(db, &config)
+		err = tribute.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing tribute:", err.Error())
 		}
 	} else if option == "7" {
-		err = spells.Clean(db, &config)
+		err = spells.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing spells:", err.Error())
 		}
 	} else if option == "8" {
-		err = priests.Clean(db, &config)
+		err = priests.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing priest of discords:", err.Error())
 		}
 	} else if option == "9" {
-		err = defiant.Clean(db, &config)
+		err = defiant.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing defiant:", err.Error())
 		}
 	} else if option == "10" {
-		err = ldon.Clean(db, &config)
+		err = ldon.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing ldon:", err.Error())
 		}
 	} else if option == "11" {
-		err = nexus.Clean(db, &config)
+		err = nexus.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing nexus:", err.Error())
 		}
 	} else if option == "12" {
-		err = rainsnow.Clean(db, &config)
+		err = rainsnow.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}
 	} else if option == "13" {
-		err = shadowrest.Clean(db, &config)
+		err = shadowrest.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}
 	} else if option == "14" {
-		err = emptymerchant.Clean(db, &config)
+		err = emptymerchant.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}
@@ -145,8 +145,8 @@ func showMenu() {
 	return
 }
 
-func menuConfig() (config eqemuconfig.Config) {
-	config, err := eqemuconfig.LoadConfig()
+func menuConfig() (config *eqemuconfig.Config) {
+	config, err := eqemuconfig.GetConfig()
 	status := "Good"
 	if err != nil {
 		isConfigLoaded = false

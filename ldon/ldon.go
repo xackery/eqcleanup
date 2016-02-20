@@ -19,33 +19,6 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		return
 	}
 
-	mids, err := spawngroup.GetSpawnGroupIdsByLastNameWildcard(db, "Adventure Recruiter")
-	if err != nil {
-		err = fmt.Errorf("Error removing", focus, "entries: %s", err.Error())
-		return
-	}
-	for _, id := range mids {
-		ids = append(ids, id)
-	}
-
-	mids, err = spawngroup.GetSpawnGroupIdsByLastNameWildcard(db, "Raid Recruiter")
-	if err != nil {
-		err = fmt.Errorf("Error removing", focus, "entries: %s", err.Error())
-		return
-	}
-	for _, id := range mids {
-		ids = append(ids, id)
-	}
-
-	mids, err = spawngroup.GetSpawnGroupIdsByLastNameWildcard(db, "Adventure Merchant")
-	if err != nil {
-		err = fmt.Errorf("Error removing", focus, "entries: %s", err.Error())
-		return
-	}
-	for _, id := range mids {
-		ids = append(ids, id)
-	}
-
 	//Raid Recruiters
 	rids := []int64{223, 222, 69987, 69988, 69989, 64252, 64440, 695, 6742, 6743, 983, 982, 67605, 67606, 67607, 50673, 50674, 68307, 4702, 4701, 4698}
 	for _, id := range rids {
@@ -64,19 +37,12 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		ids = append(ids, id)
 	}
 
-	//other misc npcs
-	rids = []int64{6714, 694, 4700, 4699, 4694, 4704, 978, 984, 985}
-	for _, id := range rids {
-		ids = append(ids, id)
-	}
-
 	totalChanged, err := spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
 	if err != nil {
 		err = fmt.Errorf("Error removing", focus, "entries: %s", err.Error())
 		return
 	}
-
-	fmt.Println("Removed", totalChanged, " DB entries related to", focus)
+	fmt.Println("Removed", totalChanged, " DB entries related to", focus, "in spawnentry and spawngroup successfully.")
 
 	filePaths := []string{
 		//Teleporter NPCs
