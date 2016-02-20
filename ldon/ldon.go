@@ -37,6 +37,12 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		ids = append(ids, id)
 	}
 
+	//Others
+	rids = []int64{22107, 22110}
+	for _, id := range rids {
+		ids = append(ids, id)
+	}
+
 	totalChanged, err := spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
 	if err != nil {
 		err = fmt.Errorf("Error removing", focus, "entries: %s", err.Error())
