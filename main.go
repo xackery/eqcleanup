@@ -7,6 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/emptymerchant"
+	"github.com/xackery/eqcleanup/fabled"
 	"github.com/xackery/eqcleanup/ldon"
 	"github.com/xackery/eqcleanup/nexus"
 	"github.com/xackery/eqcleanup/priests"
@@ -65,6 +66,7 @@ func showMenu() {
 		fmt.Println("12) Disable Rain and Snow")
 		fmt.Println("13) Delete Emissary of Shadowrest NPCs")
 		fmt.Println("14) Delete Empty Merchant NPCs")
+		fmt.Println("15) Remove Fabled")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -138,6 +140,11 @@ func showMenu() {
 		}
 	} else if option == "14" {
 		err = emptymerchant.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error removing rain and snow:", err.Error())
+		}
+	} else if option == "15" {
+		err = fabled.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}

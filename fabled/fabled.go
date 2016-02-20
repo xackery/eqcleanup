@@ -25,10 +25,5 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	}
 	fmt.Println("Removed", totalChanged, " DB entries related to", focus, "in spawnentry and spawngroup successfully.")
 
-	delCount, err := quest.Remove(config, filePaths)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	fmt.Println("Deleted", delCount, focus, "related quest files")
 	return
 }
