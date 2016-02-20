@@ -69,6 +69,7 @@ func showMenu() {
 		fmt.Println("14) Delete Empty Merchant NPCs")
 		fmt.Println("15) Remove Fabled")
 		fmt.Println("16) PEQ Tweaks")
+		fmt.Println("17) Named Spawn Rate Reduction")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -152,6 +153,11 @@ func showMenu() {
 		}
 	} else if option == "16" {
 		err = peqtweak.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error removing rain and snow:", err.Error())
+		}
+	} else if option == "17" {
+		err = namedreduce.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}
