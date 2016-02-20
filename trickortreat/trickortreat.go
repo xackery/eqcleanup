@@ -18,6 +18,26 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		20260, //Jack Lanturn
 		20259, //Eve_Hallows
 		20289, //a_jack_o_lantern
+		20269, //an_imp
+		20255, //booberella
+		20263, //tricksy_treetor
+		20272, //a_zombie
+		20273,
+		20270,
+		20271,
+		20268,
+		20266,
+		20267,
+		20265,
+		20264,
+		20257,
+		20258,
+		20259,
+		20261,
+		20262,
+		20274,
+		20256,
+		202373,
 	}
 	//#checkpoint_ten
 
