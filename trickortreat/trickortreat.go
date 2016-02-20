@@ -14,7 +14,11 @@ var focus = "trick or treat"
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	//Mobs
-	ids := []int64{}
+	ids := []int64{
+		20260, //Jack Lanturn
+		20259, //Eve_Hallows
+		20289, //a_jack_o_lantern
+	}
 	//#checkpoint_ten
 
 	spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
