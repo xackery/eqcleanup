@@ -10,6 +10,7 @@ import (
 	"github.com/xackery/eqcleanup/fabled"
 	"github.com/xackery/eqcleanup/ldon"
 	"github.com/xackery/eqcleanup/nexus"
+	"github.com/xackery/eqcleanup/peqtweak"
 	"github.com/xackery/eqcleanup/priests"
 	"github.com/xackery/eqcleanup/rainsnow"
 	"github.com/xackery/eqcleanup/rodent"
@@ -67,6 +68,7 @@ func showMenu() {
 		fmt.Println("13) Delete Emissary of Shadowrest NPCs")
 		fmt.Println("14) Delete Empty Merchant NPCs")
 		fmt.Println("15) Remove Fabled")
+		fmt.Println("16) PEQ Tweaks")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -145,6 +147,11 @@ func showMenu() {
 		}
 	} else if option == "15" {
 		err = fabled.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error removing rain and snow:", err.Error())
+		}
+	} else if option == "16" {
+		err = peqtweak.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing rain and snow:", err.Error())
 		}
