@@ -23,6 +23,8 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		Spawndata{Npcid: 37121, Spawngroupid: 3271, Chance: 5}, //A sand giant was 50
 		Spawndata{Npcid: 37121, Spawngroupid: 3376, Chance: 5}, //A sand giant was 50
 		Spawndata{Npcid: 37157, Spawngroupid: 2095, Chance: 5}, //cazel was 50
+		Spawndata{Npcid: 22187, Spawngroupid: 788, Chance: 5},  //a griffon was 50
+		Spawndata{Npcid: 22187, Spawngroupid: 792, Chance: 5},  //a griffon was 50
 	}
 
 	totalRemoved := 0
