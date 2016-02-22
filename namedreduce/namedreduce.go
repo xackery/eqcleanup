@@ -1,9 +1,9 @@
 package namedreduce
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/spawngroup"
 	"github.com/xackery/eqemuconfig"
 )
 
@@ -27,23 +27,24 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		Spawndata{Npcid: 22187, Spawngroupid: 792, Chance: 5},  //a griffon was 50
 	}
 
-	totalRemoved := 0
+	totalRemoved := int64(0)
 
 	for _, spawn := range spawns {
+		var result sql.Result
 		result, err = db.Exec("UPDATE spawnentry SET chance = ? WHERE npcid = ? AND spawngroupid = ?", spawn.Chance, spawn.Npcid, spawn.Spawngroupid)
 		if err != nil {
 			fmt.Println("Err updating spawngroup:", err.Error())
 			return
 		}
-
+		var affect int64
 		affect, err = result.RowsAffected()
 		if err != nil {
-			fmt.Println("Error getting rows affected for", zone, err.Error())
+			fmt.Println("Error getting rows affected for", focus, err.Error())
 			return
 		}
 		totalRemoved += affect
 	}
-	fmt.Println("Updated", totalChanged, " DB entries related to", focus, "in spawnentry and spawngroup successfully.")
+	fmt.Println("Updated", totalRemoved, " DB entries related to", focus, "in spawnentry and spawngroup successfully.")
 
 	return
 }

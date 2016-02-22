@@ -9,6 +9,7 @@ import (
 	"github.com/xackery/eqcleanup/emptymerchant"
 	"github.com/xackery/eqcleanup/fabled"
 	"github.com/xackery/eqcleanup/ldon"
+	"github.com/xackery/eqcleanup/namedreduce"
 	"github.com/xackery/eqcleanup/nexus"
 	"github.com/xackery/eqcleanup/peqtweak"
 	"github.com/xackery/eqcleanup/priests"
