@@ -13,37 +13,57 @@ type Spawndata struct {
 	Npcid        int
 	Spawngroupid int
 	Chance       int
+	Mindelay     int
+	Despawntimer int
 }
 
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 	spawns := []Spawndata{
-		Spawndata{Npcid: 37082, Spawngroupid: 2096, Chance: 5}, //Arthikus was 50
-		Spawndata{Npcid: 35160, Spawngroupid: 4748, Chance: 5}, //Ghoul of TakishHiz was 20
-		Spawndata{Npcid: 37121, Spawngroupid: 3271, Chance: 5}, //A sand giant was 50
-		Spawndata{Npcid: 37121, Spawngroupid: 3376, Chance: 5}, //A sand giant was 50
-		Spawndata{Npcid: 37157, Spawngroupid: 2095, Chance: 5}, //cazel was 50
-		Spawndata{Npcid: 22187, Spawngroupid: 788, Chance: 5},  //a griffon was 50
-		Spawndata{Npcid: 22187, Spawngroupid: 792, Chance: 5},  //a griffon was 50
-		Spawndata{Npcid: 92159, Spawngroupid: 9825, Chance: 5}, //Overseer_Miklek was 34%
+		Spawndata{Npcid: 37082, Spawngroupid: 2096, Chance: 5},                            //Arthikus was 50
+		Spawndata{Npcid: 35160, Spawngroupid: 4748, Chance: 5},                            //Ghoul of TakishHiz was 20
+		Spawndata{Npcid: 37121, Spawngroupid: 3271, Chance: 5},                            //A sand giant was 50
+		Spawndata{Npcid: 37121, Spawngroupid: 3376, Chance: 5},                            //A sand giant was 50
+		Spawndata{Npcid: 37157, Spawngroupid: 2095, Chance: 5},                            //cazel was 50
+		Spawndata{Npcid: 22187, Spawngroupid: 788, Chance: 5},                             //a griffon was 50
+		Spawndata{Npcid: 22187, Spawngroupid: 792, Chance: 5},                             //a griffon was 50
+		Spawndata{Npcid: 92159, Spawngroupid: 9825, Chance: 5},                            //Overseer_Miklek was 34%
+		Spawndata{Npcid: 110100, Spawngroupid: 16400, Mindelay: 50000, Despawntimer: 100}, //Stormfeather
+
 	}
 
 	totalRemoved := int64(0)
 
 	for _, spawn := range spawns {
 		var result sql.Result
-		result, err = db.Exec("UPDATE spawnentry SET chance = ? WHERE npcid = ? AND spawngroupid = ?", spawn.Chance, spawn.Npcid, spawn.Spawngroupid)
-		if err != nil {
-			fmt.Println("Err updating spawngroup:", err.Error())
-			return
+		if spawn.Chance > 0 {
+			result, err = db.Exec("UPDATE spawnentry SET chance = ? WHERE npcid = ? AND spawngroupid = ?", spawn.Chance, spawn.Npcid, spawn.Spawngroupid)
+			if err != nil {
+				fmt.Println("Err updating spawngroup:", err.Error())
+				return
+			}
+			var affect int64
+			affect, err = result.RowsAffected()
+			if err != nil {
+				fmt.Println("Error getting rows affected for", focus, err.Error())
+				return
+			}
+			totalRemoved += affect
 		}
-		var affect int64
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting rows affected for", focus, err.Error())
-			return
+		if spawn.Mindelay > 0 && spawn.Despawntimer > 0 {
+			result, err = db.Exec("UPDATE spawngroup SET mindelay = ?, despawn_timer = ? WHERE npcid = ? AND spawngroupid = ?", spawn.Mindelay, spawn.Despawntimer, spawn.Npcid, spawn.Spawngroupid)
+			if err != nil {
+				fmt.Println("Err updating spawngroup:", err.Error())
+				return
+			}
+			var affect int64
+			affect, err = result.RowsAffected()
+			if err != nil {
+				fmt.Println("Error getting rows affected for", focus, err.Error())
+				return
+			}
+			totalRemoved += affect
 		}
-		totalRemoved += affect
 	}
 	fmt.Println("Updated", totalRemoved, " DB entries related to", focus, "in spawnentry and spawngroup successfully.")
 
