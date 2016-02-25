@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/xackery/eqcleanup/aug"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/emptymerchant"
 	"github.com/xackery/eqcleanup/fabled"
@@ -71,6 +72,7 @@ func showMenu() {
 		fmt.Println("15) Remove Fabled")
 		fmt.Println("16) PEQ Tweaks")
 		fmt.Println("17) Named Spawn Rate Reduction")
+		fmt.Println("18) Delete Augments")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -140,27 +142,32 @@ func showMenu() {
 	} else if option == "13" {
 		err = shadowrest.Clean(db, config)
 		if err != nil {
-			fmt.Println("Error removing rain and snow:", err.Error())
+			fmt.Println("Error removing shadowrest:", err.Error())
 		}
 	} else if option == "14" {
 		err = emptymerchant.Clean(db, config)
 		if err != nil {
-			fmt.Println("Error removing rain and snow:", err.Error())
+			fmt.Println("Error removing empty merchants:", err.Error())
 		}
 	} else if option == "15" {
 		err = fabled.Clean(db, config)
 		if err != nil {
-			fmt.Println("Error removing rain and snow:", err.Error())
+			fmt.Println("Error removing fabled:", err.Error())
 		}
 	} else if option == "16" {
 		err = peqtweak.Clean(db, config)
 		if err != nil {
-			fmt.Println("Error removing rain and snow:", err.Error())
+			fmt.Println("Error appling peq tweaks:", err.Error())
 		}
 	} else if option == "17" {
 		err = namedreduce.Clean(db, config)
 		if err != nil {
-			fmt.Println("Error removing rain and snow:", err.Error())
+			fmt.Println("Error adjusting nameds:", err.Error())
+		}
+	} else if option == "18" {
+		err = aug.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error removing aug:", err.Error())
 		}
 	}
 	return
