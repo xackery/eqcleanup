@@ -38,6 +38,12 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		20274,
 		20256,
 		202373,
+		48353,
+		48354,
+		48352,
+		98641,
+		48350,
+		98643,
 	}
 	//#checkpoint_ten
 
