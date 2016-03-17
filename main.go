@@ -6,6 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/aug"
+	"github.com/xackery/eqcleanup/characterwipe"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/emptymerchant"
 	"github.com/xackery/eqcleanup/fabled"
@@ -73,6 +74,7 @@ func showMenu() {
 		fmt.Println("16) PEQ Tweaks")
 		fmt.Println("17) Named Spawn Rate Reduction")
 		fmt.Println("18) Delete Augments")
+		fmt.Println("19) Character Wipe")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -168,6 +170,11 @@ func showMenu() {
 		err = aug.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error removing aug:", err.Error())
+		}
+	} else if option == "19" {
+		err = characterwipe.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error wiping characters:", err.Error())
 		}
 	}
 	return
