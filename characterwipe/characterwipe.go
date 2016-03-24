@@ -56,7 +56,7 @@ func DeleteCharacters(db *sqlx.DB, config *eqemuconfig.Config) (totalRemoved int
 		dataStruct{tableName: "character_corpse_items", fieldName: "corpse_id", idStart: 0},
 		dataStruct{tableName: "character_corpses", fieldName: "id", idStart: 0},
 		dataStruct{tableName: "character_currency", fieldName: "id", idStart: 0},
-		dataStruct{tableName: "character_custom", fieldName: "id", idStart: 0},
+		//dataStruct{tableName: "character_custom", fieldName: "id", idStart: 0},
 		dataStruct{tableName: "character_data", fieldName: "id", idStart: 0},
 		dataStruct{tableName: "character_disciplines", fieldName: "id", idStart: 0},
 		dataStruct{tableName: "character_enabledtasks", fieldName: "charid", idStart: 0},
