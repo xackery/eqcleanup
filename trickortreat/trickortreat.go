@@ -86,6 +86,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		"toxxulia/Fuzz_Selppa.pl",
 		"unrest/Crabby_the_Rotten.pl",
 		"nektulos/#checkpoint_ten.pl", //trick or treat stop
+		"unrest/Halloween_Trigger.pl", //trick or treat stop
 	}
 
 	delCount, err := quest.Remove(config, filePaths)
