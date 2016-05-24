@@ -87,6 +87,15 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		"unrest/Crabby_the_Rotten.pl",
 		"nektulos/#checkpoint_ten.pl", //trick or treat stop
 		"unrest/Halloween_Trigger.pl", //trick or treat stop
+		"unrest/Casper.pl",
+		"unrest/Evil_Brain_Eater.pl",
+		"unrest/Eviler_Brain_Eater.pl",
+		"unrest/Evilerer_Brain_Eater.pl",
+		"unrest/Imp-ossible.pl",
+		"unrest/Jack_o_Lantern.pl",
+		"unrest/Not_So_Evil_Brain_Eater.pl",
+		"unrest/Super_Ghoul_of_Unlimited_Power.pl",
+		"unrest/Werewolf_of_DOOOOOOOM.pl",
 	}
 
 	delCount, err := quest.Remove(config, filePaths)
