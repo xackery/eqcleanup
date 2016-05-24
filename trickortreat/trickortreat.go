@@ -15,36 +15,64 @@ var focus = "trick or treat"
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	//Mobs
 	ids := []int64{
-		20260, //Jack Lanturn
-		20259, //Eve_Hallows
-		20289, //a_jack_o_lantern
-		20269, //an_imp
+		19151, //Laryn lycanthrope
+		202373,
+		202384, //wicked winnie
+		202385, //a wizeened hermit
+		20255,
 		20255, //booberella
-		20263, //tricksy_treetor
-		20272, //a_zombie
-		20273,
-		20270,
-		20271,
-		20268,
-		20266,
-		20267,
-		20265,
-		20264,
+		20256,
+		20256,
+		20257,
 		20257,
 		20258,
+		20258,
 		20259,
+		20259, //Eve_Hallows
+		20260, //Jack Lanturn
+		20261,
 		20261,
 		20262,
+		20262,
+		20263, //tricksy_treetor
+		20264,
+		20264,
+		20265,
+		20265,
+		20266,
+		20266,
+		20267,
+		20267,
+		20268,
+		20268,
+		20269,
+		20269, //an_imp
+		20270,
+		20270,
+		20271,
+		20271,
+		20272,
+		20272, //a_zombie
+		20273,
+		20273,
 		20274,
-		20256,
-		202373,
+		20274,
+		20275,  //Mippie Digs
+		20279,  //Old man draykey
+		20281,  //Syxa
+		20285,  //Crazy Charlie
+		20288,  //lurgh
+		20289,  //a_jack_o_lantern
+		25436,  //grom shives
+		38178,  //marta stalwart
+		394263, //aragol gloomflow
+		48350,
+		48352,
 		48353,
 		48354,
-		48352,
-		98641,
-		48350,
-		98643,
 		63099,
+		98641,
+		98643,
 	}
 	//#checkpoint_ten
 
