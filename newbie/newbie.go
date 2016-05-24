@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/quest"
-	"github.com/xackery/eqcleanup/spawngroup"
+	//"github.com/xackery/eqcleanup/spawngroup"
+	"github.com/xackery/eqcleanup/item"
 	"github.com/xackery/eqemuconfig"
 )
 
