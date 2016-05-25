@@ -188,7 +188,7 @@ func menuConfig() (config *eqemuconfig.Config) {
 		status = fmt.Sprintf("Bad (%s)", err.Error())
 	} else {
 		isConfigLoaded = true
-		status = fmt.Sprintf("Good (%s)", config.Longame)
+		status = fmt.Sprintf("Good (%s)", config.LongName)
 	}
 	fmt.Printf("1) Reload eqemu_config.xml (Status: %s)\n", status)
 	return
