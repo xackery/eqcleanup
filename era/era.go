@@ -92,7 +92,8 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		84305,  //Collector's Soul
 		110916, //Collector's Lava Protection Mask
 		110931, //Collector's Sample Cloak
-
+		41987,  //Glowing Othni Wristband
+		19762,  //Shimmering Black Pearl
 	}
 	totalChanged, err := item.RemoveAllInstancesOfItems(db, ids)
 	if err != nil {
