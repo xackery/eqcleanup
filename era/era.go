@@ -234,6 +234,9 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		64323,
 		64324,
 		64325,
+		37848,
+		35086,
+		41992, //glowing othni leggings
 	}
 	totalChanged, err := item.RemoveAllInstancesOfItems(db, ids)
 	if err != nil {
