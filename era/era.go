@@ -236,7 +236,27 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		64325,
 		37848,
 		35086,
-		41992, //glowing othni leggings
+		41992,  //glowing othni leggings
+		50326,  //simple combatant's orb
+		123502, //osmium ore
+		34240,  //thallium ore
+		44546,  //consigned bite items
+		44547,  //consigned bite items
+		44548,  //consigned bite items
+		44549,  //consigned bite items
+		44550,  //consigned bite items
+		44551,  //consigned bite items
+		44552,  //consigned bite items
+		44553,  //consigned bite items
+		44554,  //consigned bite items
+		44555,  //consigned bite items
+		44556,  //consigned bite items
+		44557,  //consigned bite items
+		44558,  //consigned bite items
+		44559,  //consigned bite items
+		44560,  //consigned bite items
+		56907,  //consigned bite items
+		124669, //consigned bite items
 	}
 	totalChanged, err := item.RemoveAllInstancesOfItems(db, ids)
 	if err != nil {
