@@ -313,5 +313,6 @@ func loadIds() (ids []int64) {
 		41984,  //glowing athlai
 		41985,  //glowing athlai
 		41986,  //glowing athlai
+		44921,  //brittle orleander
 	}
 }
