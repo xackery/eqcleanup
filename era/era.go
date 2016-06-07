@@ -20,7 +20,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		59438,  //coldwind blackfoot
 		48343,  //immug lashtail
 		13138,  //frog invasion
-
+		6251,
 	}
 	//#checkpoint_ten
 
@@ -314,5 +314,23 @@ func loadIds() (ids []int64) {
 		41985,  //glowing athlai
 		41986,  //glowing athlai
 		44921,  //brittle orleander
+		44761,  //gormar venom
+		44762,  //gormar venom
+		44763,  //gormar venom
+		44764,  //gormar venom
+		44765,  //gormar venom
+		44766,  //gormar venom
+		44767,  //gormar venom
+		44768,  //gormar venom
+		44769,  //gormar venom
+		44770,  //gormar venom
+		44771,  //gormar venom
+		44772,  //gormar venom
+		44773,  //gormar venom
+		44774,  //gormar venom
+		44775,  //gormar venom
+		124638, //gormar venom
+		124653, //gormar venom
+		81114,  //shimmering shard
 	}
 }
