@@ -1,7 +1,6 @@
 package era
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/item"
@@ -333,4 +332,5 @@ func loadIds() (ids []int64) {
 		124653, //gormar venom
 		81114,  //shimmering shard
 	}
+	return
 }
