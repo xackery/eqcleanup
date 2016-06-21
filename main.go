@@ -11,6 +11,7 @@ import (
 	"github.com/xackery/eqcleanup/emptymerchant"
 	"github.com/xackery/eqcleanup/fabled"
 	"github.com/xackery/eqcleanup/ldon"
+	"github.com/xackery/eqcleanup/lootprice"
 	"github.com/xackery/eqcleanup/namedreduce"
 	"github.com/xackery/eqcleanup/nexus"
 	"github.com/xackery/eqcleanup/peqtweak"
@@ -75,6 +76,7 @@ func showMenu() {
 		fmt.Println("17) Named Spawn Rate Reduction")
 		fmt.Println("18) Delete Augments")
 		fmt.Println("19) Character Wipe")
+		fmt.Println("20) Loot Price")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -175,6 +177,11 @@ func showMenu() {
 		err = characterwipe.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error wiping characters:", err.Error())
+		}
+	} else if option == "20" {
+		err = lootprice.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error adjusting loot pricing:", err.Error())
 		}
 	}
 	return
