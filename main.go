@@ -9,6 +9,7 @@ import (
 	"github.com/xackery/eqcleanup/characterwipe"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/emptymerchant"
+	"github.com/xackery/eqcleanup/era"
 	"github.com/xackery/eqcleanup/fabled"
 	"github.com/xackery/eqcleanup/ldon"
 	"github.com/xackery/eqcleanup/lootprice"
@@ -76,7 +77,8 @@ func showMenu() {
 		fmt.Println("17) Named Spawn Rate Reduction")
 		fmt.Println("18) Delete Augments")
 		fmt.Println("19) Character Wipe")
-		fmt.Println("20) Loot Price")
+		fmt.Println("20) Era Cleanup")
+		fmt.Println("21) Loot Price")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -179,6 +181,11 @@ func showMenu() {
 			fmt.Println("Error wiping characters:", err.Error())
 		}
 	} else if option == "20" {
+		err = era.Clean(db, config)
+		if err != nil {
+			fmt.Println("Error removed era:", err.Error())
+		}
+	} else if option == "20" {
 		err = lootprice.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error adjusting loot pricing:", err.Error())
@@ -195,7 +202,7 @@ func menuConfig() (config *eqemuconfig.Config) {
 		status = fmt.Sprintf("Bad (%s)", err.Error())
 	} else {
 		isConfigLoaded = true
-		status = fmt.Sprintf("Good (%s)", config.LongName)
+		status = fmt.Sprintf("Good (%s)", config.Longame)
 	}
 	fmt.Printf("1) Reload eqemu_config.xml (Status: %s)\n", status)
 	return

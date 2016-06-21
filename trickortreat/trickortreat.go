@@ -73,6 +73,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		63099,
 		98641,
 		98643,
+		98989, //lurgh
 	}
 	//#checkpoint_ten
 
