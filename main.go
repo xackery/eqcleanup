@@ -185,7 +185,7 @@ func showMenu() {
 		if err != nil {
 			fmt.Println("Error removed era:", err.Error())
 		}
-	} else if option == "20" {
+	} else if option == "21" {
 		err = lootprice.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error adjusting loot pricing:", err.Error())
@@ -202,7 +202,7 @@ func menuConfig() (config *eqemuconfig.Config) {
 		status = fmt.Sprintf("Bad (%s)", err.Error())
 	} else {
 		isConfigLoaded = true
-		status = fmt.Sprintf("Good (%s)", config.Longame)
+		status = fmt.Sprintf("Good (%s)", config.World.Longname)
 	}
 	fmt.Printf("1) Reload eqemu_config.xml (Status: %s)\n", status)
 	return
