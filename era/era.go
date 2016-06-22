@@ -3214,6 +3214,8 @@ func loadIds() (ids []int64) {
 		48888,  //	Venerable Vicious Symbol of Growth
 		48889,  //	Venerable Nimble Symbol of the Brood
 		48890,  //	Venerable Penetrating Symbol of the Brood
+		32969,  //cracked leather belt
+		62243,  //Exquisite Silk Turban
 	}
 	return
 }
