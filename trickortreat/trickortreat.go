@@ -117,6 +117,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		"nektulos/#checkpoint_ten.pl", //trick or treat stop
 		"unrest/Halloween_Trigger.pl", //trick or treat stop
 		"unrest/Casper.pl",
+		"unrest/Candy_Man.pl",
 		"unrest/Evil_Brain_Eater.pl",
 		"unrest/Eviler_Brain_Eater.pl",
 		"unrest/Evilerer_Brain_Eater.pl",
