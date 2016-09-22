@@ -8,7 +8,11 @@ import (
 
 //Flushes all possible ways to get an item, that I can think of.. except via quests and GM commands
 func RemoveAllInstancesOfItems(db *sqlx.DB, ids []int64) (totalRemoved int64, err error) {
-	for _, id := range ids {
+	fmt.Println("Removing", len(ids), "item ids")
+	for i, id := range ids {
+		if i%1000 == 0 {
+			fmt.Printf("%d,", i)
+		}
 		var affect int64
 		affect, err = DeleteQuery(db, "DELETE FROM inventory WHERE itemid = ?", id, "inventory")
 		if err != nil {
@@ -166,8 +170,8 @@ func RemoveAllInstancesOfItems(db *sqlx.DB, ids []int64) (totalRemoved int64, er
 			return
 		}
 		totalRemoved += affect
-
 	}
+	fmt.Printf("Done.\n")
 
 	return
 }
