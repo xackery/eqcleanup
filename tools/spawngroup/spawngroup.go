@@ -6,6 +6,20 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+func GetSpawn2CountForZone(db *sqlx.DB, zonename string) (count int, err error) {
+	var rows *sql.Rows
+
+	if rows, err = db.Query("SELECT COUNT(*) FROM spawn2 WHERE zone = ?", zonename); err != nil {
+		return
+	}
+	for rows.Next() {
+		if err = rows.Scan(&count); err != nil {
+			return
+		}
+	}
+	return
+}
+
 func GetSpawnGroupIdsByNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, err error) {
 
 	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE ?", "%"+wildcard+"%")
@@ -143,60 +157,66 @@ func RemoveSpawnGroupAndEntryByZone(db *sqlx.DB, zone string) (totalRemoved int6
 }
 
 func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64, err error) {
-
-	for _, id := range ids {
-		var result sql.Result
-		var affect int64
-		//Remove from spawngroup
-		result, err = db.Exec("DELETE FROM spawngroup WHERE id = ?", id)
-		if err != nil {
-			fmt.Println("Err removing from spawngroup:", err.Error())
-			return
-		}
-
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			//fmt.Println("No rows affecteted delete spawngroup", id)
-		}
-		totalRemoved += affect
-
-		//Remove from spawnentry
-		result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid = ?", id)
-		if err != nil {
-			fmt.Println("Err removing from spawnentry:", err.Error())
-			return
-		}
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting spawnentry rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			//fmt.Println("No rows affected delete spawnentry", id)
-		}
-		totalRemoved += affect
-
-		//Remove from spawn2
-
-		result, err = db.Exec("DELETE FROM spawn2 WHERE spawngroupid = ?", id)
-		if err != nil {
-			//fmt.Println("Err removing from spawngroupid:", err.Error())
-			return
-		}
-		affect, err = result.RowsAffected()
-		if err != nil {
-			fmt.Println("Error getting spawngroupid rows affected for", id, err.Error())
-			return
-		}
-		if affect < 1 {
-			//fmt.Println("No rows affected delete spawngroupid", id)
-		}
-		totalRemoved += affect
-
+	if len(ids) < 1 {
+		return
 	}
+	idsString := ""
+	for _, id := range ids {
+		idsString = fmt.Sprintf("%s%d, ", idString, id)
+	}
+	idsString = idsString[0 : len(idsString)-2]
+
+	var result sql.Result
+	var affect int64
+	//Remove from spawngroup
+	result, err = db.Exec("DELETE FROM spawngroup WHERE id IN ?", idsString)
+	if err != nil {
+		fmt.Println("Err removing from spawngroup:", err.Error())
+		return
+	}
+
+	affect, err = result.RowsAffected()
+	if err != nil {
+		fmt.Println("Error getting rows affected for", err.Error())
+		return
+	}
+	if affect < 1 {
+		//fmt.Println("No rows affecteted delete spawngroup", id)
+	}
+	totalRemoved += affect
+
+	//Remove from spawnentry
+	result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid IN ? ", idsString)
+	if err != nil {
+		fmt.Println("Err removing from spawnentry:", err.Error())
+		return
+	}
+	affect, err = result.RowsAffected()
+	if err != nil {
+		fmt.Println("Error getting spawnentry:", err.Error())
+		return
+	}
+	if affect < 1 {
+		//fmt.Println("No rows affected delete spawnentry", id)
+	}
+	totalRemoved += affect
+
+	//Remove from spawn2
+
+	result, err = db.Exec("DELETE FROM spawn2 WHERE spawngroupid IN ?", idsString)
+	if err != nil {
+		//fmt.Println("Err removing from spawngroupid:", err.Error())
+		return
+	}
+	affect, err = result.RowsAffected()
+	if err != nil {
+		fmt.Println("Error getting spawngroupid:", err.Error())
+		return
+	}
+	if affect < 1 {
+		//fmt.Println("No rows affected delete spawngroupid", id)
+	}
+	totalRemoved += affect
+
 	return
 }

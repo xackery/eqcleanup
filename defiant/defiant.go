@@ -4,7 +4,7 @@ package defiant
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/item"
+	"github.com/xackery/eqcleanup/tools/item"
 	"github.com/xackery/eqemuconfig"
 )
 

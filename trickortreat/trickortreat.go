@@ -4,9 +4,9 @@ package trickortreat
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github.com/xackery/eqcleanup/item"
-	"github.com/xackery/eqcleanup/quest"
-	"github.com/xackery/eqcleanup/spawngroup"
+	"github.com/xackery/eqcleanup/tools/item"
+	"github.com/xackery/eqcleanup/tools/quest"
+	"github.com/xackery/eqcleanup/tools/spawngroup"
 	"github.com/xackery/eqemuconfig"
 )
 
