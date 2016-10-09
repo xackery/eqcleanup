@@ -1,4 +1,4 @@
-export VERSION="0.13"
+export VERSION="0.14"
 export NAME="eqcleanup"
 echo Building Linux $VERSION
 GOOS=linux GOARCH=amd64 go build main.go
