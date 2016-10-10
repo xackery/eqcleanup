@@ -20,15 +20,15 @@ type Spawndata struct {
 func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 	spawns := []Spawndata{
-		Spawndata{Npcid: 37082, Spawngroupid: 2096, Chance: 5},                            //Arthikus was 50
-		Spawndata{Npcid: 35160, Spawngroupid: 4748, Chance: 5},                            //Ghoul of TakishHiz was 20
-		Spawndata{Npcid: 37121, Spawngroupid: 3271, Chance: 5},                            //A sand giant was 50
-		Spawndata{Npcid: 37121, Spawngroupid: 3376, Chance: 5},                            //A sand giant was 50
-		Spawndata{Npcid: 37157, Spawngroupid: 2095, Chance: 5},                            //cazel was 50
-		Spawndata{Npcid: 22187, Spawngroupid: 788, Chance: 5},                             //a griffon was 50
-		Spawndata{Npcid: 22187, Spawngroupid: 792, Chance: 5},                             //a griffon was 50
-		Spawndata{Npcid: 92159, Spawngroupid: 9825, Chance: 5},                            //Overseer_Miklek was 34%
-		Spawndata{Npcid: 110100, Spawngroupid: 16400, Mindelay: 50000, Despawntimer: 100}, //Stormfeather
+		{Npcid: 37082, Spawngroupid: 2096, Chance: 5},                            //Arthikus was 50
+		{Npcid: 35160, Spawngroupid: 4748, Chance: 5},                            //Ghoul of TakishHiz was 20
+		{Npcid: 37121, Spawngroupid: 3271, Chance: 5},                            //A sand giant was 50
+		{Npcid: 37121, Spawngroupid: 3376, Chance: 5},                            //A sand giant was 50
+		{Npcid: 37157, Spawngroupid: 2095, Chance: 5},                            //cazel was 50
+		{Npcid: 22187, Spawngroupid: 788, Chance: 5},                             //a griffon was 50
+		{Npcid: 22187, Spawngroupid: 792, Chance: 5},                             //a griffon was 50
+		{Npcid: 92159, Spawngroupid: 9825, Chance: 5},                            //Overseer_Miklek was 34%
+		{Npcid: 110100, Spawngroupid: 16400, Mindelay: 50000, Despawntimer: 100}, //Stormfeather
 
 	}
 
