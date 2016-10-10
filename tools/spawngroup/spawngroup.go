@@ -6,20 +6,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func GetSpawn2CountForZone(db *sqlx.DB, zonename string) (count int, err error) {
-	var rows *sql.Rows
-
-	if rows, err = db.Query("SELECT COUNT(*) FROM spawn2 WHERE zone = ?", zonename); err != nil {
-		return
-	}
-	for rows.Next() {
-		if err = rows.Scan(&count); err != nil {
-			return
-		}
-	}
-	return
-}
-
 func GetSpawnGroupIdsByNameWildcard(db *sqlx.DB, wildcard string) (ids []int64, err error) {
 
 	rows, err := db.Query("SELECT sg.id as id FROM npc_types nt INNER JOIN spawnentry se ON se.npcid = nt.id INNER JOIN spawngroup sg ON sg.id = se.spawngroupid WHERE nt.name LIKE ?", "%"+wildcard+"%")
@@ -103,9 +89,27 @@ func RemoveSpawnGroupAndEntryByZone(db *sqlx.DB, zone string) (totalRemoved int6
 
 	var result sql.Result
 	var affect int64
-	//Remove from spawngroup
 
-	result, err = db.Exec("DELETE FROM spawngroup INNER JOIN spawn2 ON spawngroup.id = spawn2.spawngroupid WHERE spawn2.zone = ?", zone)
+	//Remove from spawnentry
+	result, err = db.Exec(`DELETE spawnentry FROM spawnentry 
+		INNER JOIN spawngroup ON spawnentry.spawngroupid = spawngroup.id
+		INNER JOIN spawn2 ON spawngroup.id = spawn2.spawngroupid 
+		WHERE spawn2.zone = ?`, zone)
+	if err != nil {
+		fmt.Println("Err removing from spawnentry:", err.Error())
+		return
+	}
+	affect, err = result.RowsAffected()
+	if err != nil {
+		fmt.Println("Error getting spawnentry rows affected for", zone, err.Error())
+		return
+	}
+	if affect < 1 {
+		//fmt.Println("No rows affected delete spawnentry", id)
+	}
+	totalRemoved += affect
+
+	result, err = db.Exec(`DELETE spawngroup FROM spawngroup INNER JOIN spawn2 ON spawngroup.id = spawn2.spawngroupid WHERE spawn2.zone = ?`, zone)
 	if err != nil {
 		fmt.Println("Err removing from spawngroup:", err.Error())
 		return
@@ -118,22 +122,6 @@ func RemoveSpawnGroupAndEntryByZone(db *sqlx.DB, zone string) (totalRemoved int6
 	}
 	if affect < 1 {
 		//fmt.Println("No rows affecteted delete spawngroup", id)
-	}
-	totalRemoved += affect
-
-	//Remove from spawnentry
-	result, err = db.Exec("DELETE FROM spawnentry INNER JOIN spawn2 ON spawngroup.spawngroupid = spawn2.spawngroupid WHERE spawn2.zone = ?", zone)
-	if err != nil {
-		fmt.Println("Err removing from spawnentry:", err.Error())
-		return
-	}
-	affect, err = result.RowsAffected()
-	if err != nil {
-		fmt.Println("Error getting spawnentry rows affected for", zone, err.Error())
-		return
-	}
-	if affect < 1 {
-		//fmt.Println("No rows affected delete spawnentry", id)
 	}
 	totalRemoved += affect
 
@@ -162,7 +150,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 	}
 	idsString := ""
 	for _, id := range ids {
-		idsString = fmt.Sprintf("%s%d, ", idString, id)
+		idsString = fmt.Sprintf("%s%d, ", idsString, id)
 	}
 	idsString = idsString[0 : len(idsString)-2]
 

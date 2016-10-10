@@ -1,4 +1,4 @@
-package spawngroup
+package npc
 
 import (
 	"database/sql"
@@ -11,7 +11,7 @@ func RemoveNPCByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) {
 	var zoneid int64
 	var rows *sql.Rows
 
-	if rows, err = db.Exec("SELECT zonenumberid from zone where short_name = ?", zone); err != nil {
+	if rows, err = db.Query("SELECT zoneidnumber from zone where short_name = ?", zone); err != nil {
 		err = fmt.Errorf("Could not find zone %s: %s", zone, err.Error())
 		return
 	}

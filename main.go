@@ -6,6 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/aug"
+	"github.com/xackery/eqcleanup/cazic"
 	"github.com/xackery/eqcleanup/characterwipe"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/emptymerchant"
@@ -53,32 +54,33 @@ var isConfigLoaded bool
 func showMenu() {
 	var err error
 	var option string
-	fmt.Println("\n\n===EQ Cleanup===")
+	fmt.Println("===EQ Cleanup===")
 	fmt.Println("Remember: Always back up before using this tool!")
 	fmt.Println("Choose an option:")
 	config := menuConfig()
 	db := menuDB(config)
 	defer db.Close()
 	if isDBConnected && isConfigLoaded {
-		fmt.Println("3) Delete Soulbinders")
-		fmt.Println("4) Delete Rodents")
-		fmt.Println("5) Delete Trick or Treat Quests")
-		fmt.Println("6) Delete Tribute Masters")
-		fmt.Println("7) Delete All spells, tomes (scribable items)")
-		fmt.Println("8) Delete Priests of Discord")
-		fmt.Println("9) Delete Defiant Armor")
-		fmt.Println("10) Delete LDON Npcs")
-		fmt.Println("11) Delete Nexus portal NPCs")
-		fmt.Println("12) Disable Rain and Snow")
-		fmt.Println("13) Delete Emissary of Shadowrest NPCs")
-		fmt.Println("14) Delete Empty Merchant NPCs")
-		fmt.Println("15) Remove Fabled")
-		fmt.Println("16) PEQ Tweaks")
-		fmt.Println("17) Named Spawn Rate Reduction")
-		fmt.Println("18) Delete Augments")
-		fmt.Println("19) Character Wipe")
-		fmt.Println("20) Era Cleanup")
-		fmt.Println("21) Loot Price")
+		fmt.Println("3) Delete Soulbinders - Remove Soulbinder NPCs from classic zones.")
+		fmt.Println("4) Delete Rodents - Remove rats from starting zones. May not get all")
+		fmt.Println("5) Delete Trick or Treat Quests - Halloween quests were added in latest PEQ, this strips them out.")
+		fmt.Println("6) Delete Tribute Masters - Removes the tribue NPCs")
+		fmt.Println("7) Delete All spells, tomes (scribable items) - This is experimental")
+		fmt.Println("8) Delete Priests of Discord - Self explanatory")
+		fmt.Println("9) Delete Defiant Armor - Removes specifically defiant armor (better to use out of era)")
+		fmt.Println("10) Delete LDON Npcs - Delete the Adventuerer merchants and other NPCs for LDON")
+		fmt.Println("11) Delete Nexus portal NPCs - Removes the Luclin Nexus representatives across norrath (NK, DL, etc)")
+		fmt.Println("12) Disable Rain and Snow - Disables Rain and Snow from ever happening on any zone.")
+		fmt.Println("13) Delete Emissary of Shadowrest NPCs - Cleans out the Shadowrest NPCs in East Commonlands")
+		fmt.Println("14) Delete Empty Merchant NPCs - If you remove spells, this will remove any empty merchants.")
+		fmt.Println("15) Remove Fabled - Removes fabled mobs from spawning")
+		fmt.Println("16) PEQ Tweaks - Misc tweaks, like fixing skeleton movement speed 0 problems")
+		fmt.Println("17) Named Spawn Rate Reduction - Adjusts spawn rate on some key named monsters")
+		fmt.Println("18) Delete Augments - Delete all augments on server")
+		fmt.Println("19) Character Wipe - Flushes all character/account data")
+		fmt.Println("20) Era Cleanup - Strips out items post-velious")
+		fmt.Println("21) Loot Price - Special price adjustment script (IGNORE)")
+		fmt.Println("22) Migrate Cazic Thule - Migrates NPCs from New Cazic Thule to Old Cazic Thule")
 	} else {
 		fmt.Println("-Commands are disabled until database and config is good-")
 	}
@@ -189,6 +191,10 @@ func showMenu() {
 		err = lootprice.Clean(db, config)
 		if err != nil {
 			fmt.Println("Error adjusting loot pricing:", err.Error())
+		}
+	} else if option == "22" {
+		if err = cazic.Clean(db, config); err != nil {
+			fmt.Println("Error migrating cazic:", err.Error())
 		}
 	}
 	return

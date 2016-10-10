@@ -1,3 +1,6 @@
+#a temp dir just so it can delete quests on testing
+quests/
+
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
