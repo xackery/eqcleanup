@@ -2,7 +2,6 @@ package injector
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"reflect"
 )
 
@@ -25,7 +24,7 @@ func MapFields(x interface{}) (m map[string]interface{}) {
 	return
 }
 
-func PrepareInsertString(entry interface{}, table string) (insertString string) {
+func PrepareInsertString(entry interface{}, table string) (insertString string, err error) {
 	q := "INSERT INTO " + table + " ("
 	m := MapFields(entry)
 	fields := ""
@@ -33,24 +32,13 @@ func PrepareInsertString(entry interface{}, table string) (insertString string) 
 		q += fmt.Sprintf("%s, ", k)
 		fields += fmt.Sprintf(":%s, ", k)
 	}
+	if len(fields) < 4 {
+		err = fmt.Errorf("Size of %s too small", table)
+		return
+	}
 	fields = fields[0 : len(fields)-2]
 	q = q[0:len(q)-2] + ") VALUES (" + fields + ")"
 
 	insertString = q
-	return
-}
-
-func Inject(db *sqlx.DB, entries []interface{}, table string) (totalChanged int64, err error) {
-	//SPAWNENTRY
-	q := PrepareInsertString(entries[0], "spawnentry")
-
-	//fmt.Println(q)
-	totalChanged = 0
-	for _, sg := range entries {
-		if _, err = db.NamedExec(q, &sg); err != nil {
-			return
-		}
-		totalChanged++
-	}
 	return
 }

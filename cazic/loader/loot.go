@@ -164,5 +164,147 @@ var loottableentries []loot.LootTableEntries = []loot.LootTableEntries{
 		return
 	}
 	fmt.Println("Generated", counter, "loottableentry")
+
+	f, err = os.Create("../lootdrop.go")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer f.Close()
+
+	lootstring = "("
+	for _, lootid := range lootids {
+		lootstring += fmt.Sprintf("%d, ", lootid)
+	}
+	lootstring = lootstring[0:len(lootstring)-2] + ")"
+
+	rows, err = db.Queryx(fmt.Sprintf("SELECT lootdrop.* FROM lootdrop INNER JOIN loottable_entries ON loottable_entries.lootdrop_id = lootdrop.id WHERE loottable_id in %s", lootstring))
+	if err != nil {
+		fmt.Println("Error exec select:", err.Error())
+		os.Exit(1)
+	}
+
+	outStr = `
+package cazic
+import (
+	"github.com/xackery/goeq/loot"
+	//"database/sql"
+	)
+
+var lootdrops []loot.LootDrop = []loot.LootDrop{
+`
+
+	counter = 0
+
+	for rows.Next() {
+		counter++
+		l := loot.LootDrop{}
+		if err = rows.StructScan(&l); err != nil {
+			fmt.Println("Error getting rows", err.Error())
+			os.Exit(1)
+		}
+
+		m := mapFields(&l)
+
+		outStr += "loot.LootDrop{"
+		for k, v := range m {
+			switch v.(type) {
+			case string:
+				outStr = fmt.Sprintf("%s%s: \"%s\", ", outStr, k, v)
+			case sql.NullString:
+				outStr = fmt.Sprintf("%s%s: sql.NullString{String: \"%s\", Valid: true}, ", outStr, k, v.(sql.NullString).String)
+			case int:
+
+				outStr = fmt.Sprintf("%s%s: %d, ", outStr, k, v)
+			case sql.NullInt64:
+				outStr = fmt.Sprintf("%s%s: sql.NullInt64{Int64: %d, Valid: true}, ", outStr, k, v.(sql.NullInt64).Int64)
+			case float64:
+				outStr = fmt.Sprintf("%s%s: %f, ", outStr, k, v)
+			default:
+				fmt.Println("Unsupported type:", k, v)
+				return
+			}
+		}
+		outStr = outStr[0 : len(outStr)-2]
+		outStr += "},\n"
+	}
+	outStr += "}"
+
+	if _, err = f.WriteString(outStr); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	fmt.Println("Generated", counter, "LootDrop")
+
+	f, err = os.Create("../lootdropentries.go")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer f.Close()
+
+	lootstring = "("
+	for _, lootid := range lootids {
+		lootstring += fmt.Sprintf("%d, ", lootid)
+	}
+	lootstring = lootstring[0:len(lootstring)-2] + ")"
+
+	rows, err = db.Queryx(fmt.Sprintf("SELECT lootdrop_entries.* FROM lootdrop_entries INNER JOIN lootdrop ON lootdrop.id = lootdrop_entries.lootdrop_id INNER JOIN loottable_entries ON loottable_entries.lootdrop_id = lootdrop.id WHERE loottable_id in %s", lootstring))
+	if err != nil {
+		fmt.Println("Error exec select:", err.Error())
+		os.Exit(1)
+	}
+
+	outStr = `
+package cazic
+import (
+	"github.com/xackery/goeq/loot"
+	//"database/sql"
+	)
+
+var lootdropentries []loot.LootDropEntries = []loot.LootDropEntries{
+`
+
+	counter = 0
+
+	for rows.Next() {
+		counter++
+		l := loot.LootDropEntries{}
+		if err = rows.StructScan(&l); err != nil {
+			fmt.Println("Error getting rows", err.Error())
+			os.Exit(1)
+		}
+
+		m := mapFields(&l)
+
+		outStr += "loot.LootDropEntries{"
+		for k, v := range m {
+			switch v.(type) {
+			case string:
+				outStr = fmt.Sprintf("%s%s: \"%s\", ", outStr, k, v)
+			case sql.NullString:
+				outStr = fmt.Sprintf("%s%s: sql.NullString{String: \"%s\", Valid: true}, ", outStr, k, v.(sql.NullString).String)
+			case int:
+
+				outStr = fmt.Sprintf("%s%s: %d, ", outStr, k, v)
+			case sql.NullInt64:
+				outStr = fmt.Sprintf("%s%s: sql.NullInt64{Int64: %d, Valid: true}, ", outStr, k, v.(sql.NullInt64).Int64)
+			case float64:
+				outStr = fmt.Sprintf("%s%s: %f, ", outStr, k, v)
+			default:
+				fmt.Println("Unsupported type:", k, v)
+				return
+			}
+		}
+		outStr = outStr[0 : len(outStr)-2]
+		outStr += "},\n"
+	}
+	outStr += "}"
+
+	if _, err = f.WriteString(outStr); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	fmt.Println("Generated", counter, "LootDropEntries")
 	return
 }
