@@ -24,7 +24,7 @@ func RemoveLootByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) 
 		err = fmt.Errorf("Error getting rows affected: %s", err.Error())
 		return
 	}
-	fmt.Println("Removed", affect, "lootdrop_entries")
+
 	totalRemoved += affect
 	if result, err = db.Exec(`DELETE loottable FROM loottable 
 		INNER JOIN loottable_entries ON loottable_entries.loottable_id = loottable.id 
@@ -39,7 +39,7 @@ func RemoveLootByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) 
 		err = fmt.Errorf("Error getting rows affected: %s", err.Error())
 		return
 	}
-	fmt.Println("Removed", affect, "loottable")
+
 	totalRemoved += affect
 
 	if result, err = db.Exec(`DELETE lootdrop FROM lootdrop 
@@ -55,7 +55,7 @@ func RemoveLootByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) 
 		err = fmt.Errorf("Error getting rows affected: %s", err.Error())
 		return
 	}
-	fmt.Println("Removed", affect, "lootdrop")
+
 	totalRemoved += affect
 
 	if result, err = db.Exec(`DELETE loottable_entries FROM loottable_entries 
@@ -70,8 +70,8 @@ func RemoveLootByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) 
 		err = fmt.Errorf("Error getting rows affected: %s", err.Error())
 		return
 	}
-	fmt.Println("Removed", affect, "loottable_entries")
 	totalRemoved += affect
+	fmt.Println("Removed", affect, "loot related entries")
 
 	return
 }

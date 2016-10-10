@@ -1,5 +1,5 @@
 //This script will disable fabled npcs and quests
-package cazic
+package cazicthule
 
 import (
 	"database/sql"
@@ -51,7 +51,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		err = fmt.Errorf("spawngroups empty! Please download a newer eqcleanup")
 		return
 	}
-	fmt.Println("Purging out old data about", focus, "...")
+	fmt.Println("Removing old data about", focus, "...")
 
 	if totalChanged, err = loot.RemoveLootByZone(db, zonename); err != nil {
 		return
@@ -100,24 +100,22 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		}
 
 		//now that lootdrops has changed, sync up loottables with proper lootdrop ids
-		for i, _ := range loottableentries {
+		for i := range loottableentries {
 			if loottableentries[i].Lootdrop_id == int(l.Id) {
 				loottableentries[i].Lootdrop_id = int(lastId)
 			}
 		}
-		for i, _ := range lootdropentries {
+		for i := range lootdropentries {
 			if lootdropentries[i].Lootdrop_id == int(l.Id) {
 				lootdropentries[i].Lootdrop_id = int(lastId)
 			}
 		}
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "lootdrops")
 
 	if q, err = injector.PrepareInsertString(&lootdropentries[0], "lootdrop_entries"); err != nil {
 		return
 	}
-	totalChanged = 0
 
 	for _, l := range lootdropentries {
 		if result, err = db.NamedExec(q, &l); err != nil {
@@ -131,7 +129,6 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		}
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "lootdropentries")
 
 	if q, err = injector.PrepareInsertString(&loottables[0], "loottable"); err != nil {
 		return
@@ -151,13 +148,13 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		}
 
 		//now that lootable has changed, sync npc ids to use proper loot table ids
-		for i, _ := range npctypes {
+		for i := range npctypes {
 			if npctypes[i].Loottable_id == int(l.Id.Int64) {
 				npctypes[i].Loottable_id = int(lastId)
 			}
 		}
 
-		for i, _ := range loottableentries {
+		for i := range loottableentries {
 			if loottableentries[i].Loottable_id == int(l.Id.Int64) {
 				loottableentries[i].Loottable_id = int(lastId)
 			}
@@ -165,12 +162,10 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "loottable")
 
 	if q, err = injector.PrepareInsertString(&loottableentries[0], "loottable_entries"); err != nil {
 		return
 	}
-	totalChanged = 0
 
 	for _, l := range loottableentries {
 		if result, err = db.NamedExec(q, &l); err != nil {
@@ -182,7 +177,7 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "loottable entries")
+	fmt.Println("Inserted", totalChanged, "loot related entries")
 
 	//GRID
 	if q, err = injector.PrepareInsertString(&grids[0], "grid"); err != nil {
@@ -196,20 +191,18 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		}
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "grids")
 
 	if q, err = injector.PrepareInsertString(&gridentries[0], "grid_entries"); err != nil {
 		return
 	}
-	//fmt.Println(q)
-	totalChanged = 0
+
 	for _, g := range gridentries {
 		if _, err = db.NamedExec(q, &g); err != nil {
 			return
 		}
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "grid_entries")
+	fmt.Println("Inserted", totalChanged, "grid related entries")
 
 	//NPCS
 	if len(npctypes) < 1 {
@@ -252,12 +245,12 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		}
 
 		//Now that spawngroup has changed, affect other records that depend on spawngroupid.
-		for i, _ := range spawnentries {
+		for i := range spawnentries {
 			if spawnentries[i].Spawngroupid == int(sg.Id.Int64) {
 				spawnentries[i].Spawngroupid = int(lastId)
 			}
 		}
-		for i, _ := range spawns {
+		for i := range spawns {
 			if spawns[i].Spawngroupid == int(sg.Id.Int64) {
 				spawns[i].Spawngroupid = int(lastId)
 			}
@@ -265,31 +258,27 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "spawngroups")
 
 	if q, err = injector.PrepareInsertString(&spawns[0], "spawn2"); err != nil {
 		return
 	}
-	totalChanged = 0
 	for _, sg := range spawns {
 		if _, err = db.NamedExec(q, &sg); err != nil {
 			return
 		}
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "spawn2")
 
 	if q, err = injector.PrepareInsertString(&spawnentries[0], "spawnentry"); err != nil {
 		return
 	}
-	totalChanged = 0
 	for _, sg := range spawnentries {
 		if _, err = db.NamedExec(q, &sg); err != nil {
 			return
 		}
 		totalChanged++
 	}
-	fmt.Println("Inserted", totalChanged, "spawnentry")
+	fmt.Println("Inserted", totalChanged, "spawn related entries")
 
 	return
 }

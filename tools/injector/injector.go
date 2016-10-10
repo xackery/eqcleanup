@@ -28,7 +28,7 @@ func PrepareInsertString(entry interface{}, table string) (insertString string, 
 	q := "INSERT INTO " + table + " ("
 	m := MapFields(entry)
 	fields := ""
-	for k, _ := range m {
+	for k := range m {
 		if table == "lootdrop" && k == "id" {
 			continue
 		}

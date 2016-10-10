@@ -6,7 +6,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/xackery/eqcleanup/aug"
-	"github.com/xackery/eqcleanup/cazic"
+	"github.com/xackery/eqcleanup/cazicthule"
 	"github.com/xackery/eqcleanup/characterwipe"
 	"github.com/xackery/eqcleanup/defiant"
 	"github.com/xackery/eqcleanup/emptymerchant"
@@ -193,7 +193,7 @@ func showMenu() {
 			fmt.Println("Error adjusting loot pricing:", err.Error())
 		}
 	} else if option == "22" {
-		if err = cazic.Clean(db, config); err != nil {
+		if err = cazicthule.Clean(db, config); err != nil {
 			fmt.Println("Error migrating cazic:", err.Error())
 		}
 	}
