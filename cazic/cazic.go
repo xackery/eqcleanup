@@ -43,16 +43,25 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 	q := "INSERT INTO npc_types ("
 	m := mapFields(&npcids[0])
+	fmt.Println(npcids[0].Id, npcids[0].Name)
+	fields := ""
 	for k, _ := range m {
 		q += fmt.Sprintf("%s, ", k)
+		fields += fmt.Sprintf(":%s, ", k)
 	}
-	q = q[0:len(q)-2] + ") VALUES "
-	fmt.Println(q)
-
-	//	if totalChanged, err = result.RowsAffected(); err != nil {
-	//		return
-	//	}
-	fmt.Println("Inserted", totalChanged, "new npcs")
+	fields = fields[0 : len(fields)-2]
+	q = q[0:len(q)-2] + ") VALUES (" + fields + ")"
+	//fmt.Println(q)
+	totalChanged = 0
+	for _, npcid := range npcids {
+		fmt.Println(npcid)
+		npcid.Id.Valid = true
+		if _, err = db.NamedExec(q, &npcid); err != nil {
+			return
+		}
+		totalChanged++
+	}
+	fmt.Println("Inserted", totalChanged, "npcs")
 
 	return
 }
@@ -69,7 +78,11 @@ func mapFields(x *npc.NpcTypes) M {
 		if f.PkgPath != "" {
 			continue
 		}
-		o[f.Name] = v.FieldByIndex([]int{i}).Interface()
+		if f.Tag.Get("db") == "" {
+			continue
+		}
+		o[f.Tag.Get("db")] = v.FieldByIndex([]int{i}).Interface()
+
 	}
 	return o
 }
