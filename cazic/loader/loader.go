@@ -32,8 +32,11 @@ func main() {
 	}
 
 	outStr := `
-package main
-import ("github.com/xackery/goeq/npc")
+package cazic
+import (
+	"github.com/xackery/goeq/npc"
+	"database/sql"
+	)
 
 var npcids []npc.NpcTypes = []npc.NpcTypes{
 `
@@ -52,18 +55,18 @@ var npcids []npc.NpcTypes = []npc.NpcTypes{
 		}
 
 		m := mapFields(&pnpc)
-		outStr += "&npc.NpcTypes{"
+		outStr += "npc.NpcTypes{"
 		for k, v := range m {
 			switch v.(type) {
 			case string:
 				outStr = fmt.Sprintf("%s%s: \"%s\", ", outStr, k, v)
 			case sql.NullString:
-				outStr = fmt.Sprintf("%s%s: \"%s\", ", outStr, k, v.(sql.NullString).String)
+				outStr = fmt.Sprintf("%s%s: sql.NullString{String: \"%s\"}, ", outStr, k, v.(sql.NullString).String)
 			case int:
 
 				outStr = fmt.Sprintf("%s%s: %d, ", outStr, k, v)
 			case sql.NullInt64:
-				outStr = fmt.Sprintf("%s%s: %d, ", outStr, k, v.(sql.NullInt64).Int64)
+				outStr = fmt.Sprintf("%s%s: sql.NullInt64{Int64: %d}, ", outStr, k, v.(sql.NullInt64).Int64)
 			case float64:
 				outStr = fmt.Sprintf("%s%s: %f, ", outStr, k, v)
 			default:
