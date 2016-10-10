@@ -1,3 +1,3 @@
-go run loader.go
+go run *.go
 cd ..
 go fmt *.go
