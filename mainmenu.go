@@ -15,11 +15,18 @@ var isConfigLoaded bool
 
 func main() {
 	var err error
+	fmt.Println("                         EQCleanup, v0.15")
+	fmt.Println("                       Written by Shin Noir")
+	fmt.Println("--------------------------------------------------------------------------")
+	var option string
 	_, err = eqdb.Load()
 	if err != nil {
 		fmt.Println(err.Error())
+		fmt.Println("Press q then enter to quit.")
+		fmt.Scanf(option)
 		return
 	}
+	fmt.Println("* !!!NOTE!!! Backup your database before using this tool.")
 
 	//var err error
 	mainMenu := []menu.CommandOption{
