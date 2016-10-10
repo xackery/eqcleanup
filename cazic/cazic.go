@@ -57,10 +57,15 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		return
 	}
 
+	if totalChanged, err = spawngroup.RemoveGridByZone(db, zonename); err != nil {
+		return
+	}
+	fmt.Println("Removed", totalChanged, "grid related entries")
+
 	if totalChanged, err = spawngroup.RemoveSpawnGroupAndEntryByZone(db, zonename); err != nil {
 		return
 	}
-	fmt.Println("Removed", totalChanged, "spawn group entries")
+	fmt.Println("Removed", totalChanged, "spawn related entries")
 
 	if totalChanged, err = npcpkg.RemoveNPCByZone(db, zonename); err != nil {
 		return
@@ -83,12 +88,14 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	totalChanged = 0
 
 	for _, l := range lootdrops {
-		if result, err = db.NamedExec(q, &l); err != nil {
+		if result, err = db.NamedExec(q, map[string]interface{}{"name": l.Name}); err != nil {
+			err = fmt.Errorf("with lootdrop insert: %s", err.Error())
 			return
 		}
 		var lastId int64
 
 		if lastId, err = result.LastInsertId(); err != nil {
+			err = fmt.Errorf("with lootdrop last insert: %s", err.Error())
 			return
 		}
 
@@ -114,10 +121,12 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 
 	for _, l := range lootdropentries {
 		if result, err = db.NamedExec(q, &l); err != nil {
+			err = fmt.Errorf("with lootdropentries insert: %s", err.Error())
 			return
 		}
 
 		if _, err = result.LastInsertId(); err != nil {
+			err = fmt.Errorf("with lootdropentries insert: %s", err.Error())
 			return
 		}
 		totalChanged++
@@ -127,16 +136,17 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 	if q, err = injector.PrepareInsertString(&loottables[0], "loottable"); err != nil {
 		return
 	}
-	totalChanged = 0
 
 	for _, l := range loottables {
 		l.Id.Valid = false
 		if result, err = db.NamedExec(q, &l); err != nil {
+			err = fmt.Errorf("with loottable insert: %s", err.Error())
 			return
 		}
 		var lastId int64
 
 		if lastId, err = result.LastInsertId(); err != nil {
+			err = fmt.Errorf("with loottable lastid insert: %s", err.Error())
 			return
 		}
 
@@ -144,7 +154,6 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		for i, _ := range npctypes {
 			if npctypes[i].Loottable_id == int(l.Id.Int64) {
 				npctypes[i].Loottable_id = int(lastId)
-				return
 			}
 		}
 
@@ -174,6 +183,33 @@ func Clean(db *sqlx.DB, config *eqemuconfig.Config) (err error) {
 		totalChanged++
 	}
 	fmt.Println("Inserted", totalChanged, "loottable entries")
+
+	//GRID
+	if q, err = injector.PrepareInsertString(&grids[0], "grid"); err != nil {
+		return
+	}
+	//fmt.Println(q)
+	totalChanged = 0
+	for _, g := range grids {
+		if _, err = db.NamedExec(q, &g); err != nil {
+			return
+		}
+		totalChanged++
+	}
+	fmt.Println("Inserted", totalChanged, "grids")
+
+	if q, err = injector.PrepareInsertString(&gridentries[0], "grid_entries"); err != nil {
+		return
+	}
+	//fmt.Println(q)
+	totalChanged = 0
+	for _, g := range gridentries {
+		if _, err = db.NamedExec(q, &g); err != nil {
+			return
+		}
+		totalChanged++
+	}
+	fmt.Println("Inserted", totalChanged, "grid_entries")
 
 	//NPCS
 	if len(npctypes) < 1 {

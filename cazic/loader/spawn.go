@@ -198,6 +198,19 @@ var spawns []spawn.Spawn2 = []spawn.Spawn2{
 		}
 		m := mapFields(&se)
 
+		if ts.Pathgrid != 0 {
+			isUnique := true
+			for _, gridid := range gridids {
+				if gridid == ts.Pathgrid {
+					isUnique = false
+					break
+				}
+			}
+			if isUnique {
+				gridids = append(gridids, ts.Pathgrid)
+			}
+		}
+
 		outStr += "spawn.Spawn2{"
 		for k, v := range m {
 			switch v.(type) {

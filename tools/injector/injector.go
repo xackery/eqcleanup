@@ -29,6 +29,9 @@ func PrepareInsertString(entry interface{}, table string) (insertString string, 
 	m := MapFields(entry)
 	fields := ""
 	for k, _ := range m {
+		if table == "lootdrop" && k == "id" {
+			continue
+		}
 		q += fmt.Sprintf("%s, ", k)
 		fields += fmt.Sprintf(":%s, ", k)
 	}

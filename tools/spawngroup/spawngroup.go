@@ -85,6 +85,47 @@ func GetSpawnGroupIdsByClass(db *sqlx.DB, class int64) (ids []int64, err error) 
 	return
 }
 
+func RemoveGridByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) {
+
+	var result sql.Result
+	var affect int64
+
+	result, err = db.Exec(`DELETE grid_entries FROM grid_entries
+		INNER JOIN zone ON zone.zoneidnumber = zoneid 
+		WHERE zone.short_name = ?`, zone)
+	if err != nil {
+		fmt.Println("Err removing from gridentries:", err.Error())
+		return
+	}
+	affect, err = result.RowsAffected()
+	if err != nil {
+		fmt.Println("Error getting gridentries rows affected for", zone, err.Error())
+		return
+	}
+	if affect < 1 {
+		//fmt.Println("No rows affected delete spawnentry", id)
+	}
+	totalRemoved += affect
+
+	result, err = db.Exec(`DELETE grid FROM grid 
+		INNER JOIN zone ON zone.zoneidnumber = grid.zoneid 
+		WHERE zone.short_name = ?`, zone)
+	if err != nil {
+		fmt.Println("Err removing from grid:", err.Error())
+		return
+	}
+	affect, err = result.RowsAffected()
+	if err != nil {
+		fmt.Println("Error getting grid rows affected for", zone, err.Error())
+		return
+	}
+	if affect < 1 {
+		//fmt.Println("No rows affected delete spawnentry", id)
+	}
+	totalRemoved += affect
+	return
+}
+
 func RemoveSpawnGroupAndEntryByZone(db *sqlx.DB, zone string) (totalRemoved int64, err error) {
 
 	var result sql.Result

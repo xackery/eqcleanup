@@ -52,7 +52,16 @@ var npctypes []npc.NpcTypes = []npc.NpcTypes{
 
 		//Store loot tables for later, when loot gets generated
 		if pnpc.Loottable_id != 0 {
-			lootids = append(lootids, pnpc.Loottable_id)
+			isUnique := true
+			for _, lootid := range lootids {
+				if lootid == pnpc.Loottable_id {
+					isUnique = false
+					break
+				}
+			}
+			if isUnique {
+				lootids = append(lootids, pnpc.Loottable_id)
+			}
 		}
 
 		m := mapFields(&pnpc)

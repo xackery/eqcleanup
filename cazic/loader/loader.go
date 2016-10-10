@@ -12,6 +12,7 @@ var zoneid int = 48
 var packagename string = "cazic"
 
 var lootids []int = []int{}
+var gridids []int = []int{}
 
 func main() {
 	db, err := sqlx.Open("mysql", fmt.Sprintf("root@tcp(127.0.0.1:3306)/eqmac?charset=utf8&parseTime=true"))
@@ -23,6 +24,7 @@ func main() {
 	generateNPCTypes(db)
 	generateSpawngroups(db)
 	generateLoot(db)
+	generateGrids(db)
 	return
 }
 

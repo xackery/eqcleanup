@@ -95,13 +95,7 @@ var loottables []loot.LootTable = []loot.LootTable{
 	}
 	defer f.Close()
 
-	lootstring = "("
-	for _, lootid := range lootids {
-		lootstring += fmt.Sprintf("%d, ", lootid)
-	}
-	lootstring = lootstring[0:len(lootstring)-2] + ")"
-
-	rows, err = db.Queryx(fmt.Sprintf("SELECT * FROM loottable_entries where loottable_id in %s", lootstring))
+	rows, err = db.Queryx(fmt.Sprintf("SELECT * FROM loottable_entries WHERE loottable_id IN %s", lootstring))
 	if err != nil {
 		fmt.Println("Error exec select:", err.Error())
 		os.Exit(1)
@@ -172,12 +166,6 @@ var loottableentries []loot.LootTableEntries = []loot.LootTableEntries{
 	}
 	defer f.Close()
 
-	lootstring = "("
-	for _, lootid := range lootids {
-		lootstring += fmt.Sprintf("%d, ", lootid)
-	}
-	lootstring = lootstring[0:len(lootstring)-2] + ")"
-
 	rows, err = db.Queryx(fmt.Sprintf("SELECT lootdrop.* FROM lootdrop INNER JOIN loottable_entries ON loottable_entries.lootdrop_id = lootdrop.id WHERE loottable_id in %s", lootstring))
 	if err != nil {
 		fmt.Println("Error exec select:", err.Error())
@@ -243,13 +231,13 @@ var lootdrops []loot.LootDrop = []loot.LootDrop{
 	}
 	defer f.Close()
 
-	lootstring = "("
-	for _, lootid := range lootids {
-		lootstring += fmt.Sprintf("%d, ", lootid)
-	}
-	lootstring = lootstring[0:len(lootstring)-2] + ")"
-
-	rows, err = db.Queryx(fmt.Sprintf("SELECT lootdrop_entries.* FROM lootdrop_entries INNER JOIN lootdrop ON lootdrop.id = lootdrop_entries.lootdrop_id INNER JOIN loottable_entries ON loottable_entries.lootdrop_id = lootdrop.id WHERE loottable_id in %s", lootstring))
+	rows, err = db.Queryx(fmt.Sprintf(`
+		SELECT lootdrop_entries.* 
+		FROM lootdrop_entries 
+		INNER JOIN lootdrop ON lootdrop.id = lootdrop_entries.lootdrop_id 
+		INNER JOIN loottable_entries ON loottable_entries.lootdrop_id = lootdrop.id 
+		WHERE loottable_id in %s
+		GROUP BY lootdrop_entries.item_id, lootdrop_entries.lootdrop_id`, lootstring))
 	if err != nil {
 		fmt.Println("Error exec select:", err.Error())
 		os.Exit(1)
