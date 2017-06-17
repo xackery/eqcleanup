@@ -11,7 +11,7 @@ import (
 )
 
 func generateLoot(db *sqlx.DB) (err error) {
-	f, err := os.Create("../../" + zonename + "/loottable.go")
+	f, err := os.Create("../../zone/" + zonename + "/loottable.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -88,7 +88,7 @@ var loottables []loot.LootTable = []loot.LootTable{
 	}
 	fmt.Println("Generated", counter, "loottable")
 
-	f, err = os.Create("../../" + zonename + "/loottableentries.go")
+	f, err = os.Create("../../zone/" + zonename + "/loottableentries.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -159,7 +159,7 @@ var loottableentries []loot.LootTableEntries = []loot.LootTableEntries{
 	}
 	fmt.Println("Generated", counter, "loottableentry")
 
-	f, err = os.Create("../../" + zonename + "/lootdrop.go")
+	f, err = os.Create("../../zone/" + zonename + "/lootdrop.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -224,7 +224,7 @@ var lootdrops []loot.LootDrop = []loot.LootDrop{
 	}
 	fmt.Println("Generated", counter, "LootDrop")
 
-	f, err = os.Create("../../" + zonename + "/lootdropentries.go")
+	f, err = os.Create("../../zone/" + zonename + "/lootdropentries.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return

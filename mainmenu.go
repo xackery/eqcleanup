@@ -30,10 +30,10 @@ func main() {
 
 	//var err error
 	mainMenu := []menu.CommandOption{
-		menu.CommandOption{"era", "Out of era edits, ex. removing items or npcs", era.Menu},
-		menu.CommandOption{"zone", "Zone migration tools, ex. newer to classic zone", zone.Menu},
-		menu.CommandOption{"core", "System maintainence options, ex. removing all character data", core.Menu},
-		menu.CommandOption{"misc", "misc edits, ex. disabling rainfall", misc.Menu},
+		{"era", "Out of era edits, ex. removing items or npcs", era.Menu},
+		{"zone", "Zone migration tools, ex. newer to classic zone", zone.Menu},
+		{"core", "System maintainence options, ex. removing all character data", core.Menu},
+		{"misc", "Misc edits, ex. disabling rainfall", misc.Menu},
 	}
 	menuOptions := menu.NewMenuOptions("'menu' for help []> ", 0)
 

@@ -11,11 +11,11 @@ import (
 func Menu(args ...string) (err error) {
 	//var err error
 	eraMenu := []menu.CommandOption{
-		menu.CommandOption{"spell", "Removes all spell scrolls from game", spell.Clean},
-		menu.CommandOption{"rain", "Disables Rain & Snow on all zones", rain.Clean},
-		menu.CommandOption{"priest", "Removes Priest of Discord", priest.Clean},
-		menu.CommandOption{"merchant", "Removes any merchants with empty inventory", merchant.Clean},
-		menu.CommandOption{"quit", "Return to main menu", nil},
+		{"spell", "Removes all spell scrolls from game", spell.Clean},
+		{"rain", "Disables Rain & Snow on all zones", rain.Clean},
+		{"priest", "Removes Priest of Discord", priest.Clean},
+		{"merchant", "Removes any merchants with empty inventory", merchant.Clean},
+		{"quit", "Return to main menu", nil},
 	}
 	menuOptions := menu.NewMenuOptions("'menu' for help [system]> ", 0)
 

@@ -11,7 +11,7 @@ import (
 )
 
 func generateNPCTypes(db *sqlx.DB) (err error) {
-	f, err := os.Create("../../" + zonename + "/npctypes.go")
+	f, err := os.Create("../../zone/" + zonename + "/npctypes.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return

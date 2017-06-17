@@ -10,14 +10,16 @@ import (
 )
 
 func generateGrids(db *sqlx.DB) (err error) {
-
+	if len(gridids) < 1 {
+		return
+	}
 	gridstring := "("
 	for _, gridid := range gridids {
 		gridstring += fmt.Sprintf("%d, ", gridid)
 	}
 	gridstring = gridstring[0:len(gridstring)-2] + ")"
 
-	f, err := os.Create("../../" + zonename + "/grid.go")
+	f, err := os.Create("../../zone/" + zonename + "/grid.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -80,7 +82,7 @@ var grids []grid.Grid = []grid.Grid{
 	}
 	fmt.Println("Generated", count, "grids")
 
-	f, err = os.Create("../../" + zonename + "/gridentries.go")
+	f, err = os.Create("../../zone/" + zonename + "/gridentries.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return

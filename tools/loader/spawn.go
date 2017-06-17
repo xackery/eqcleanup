@@ -11,7 +11,7 @@ import (
 )
 
 func generateSpawngroups(db *sqlx.DB) (err error) {
-	f, err := os.Create("../../" + zonename + "/spawngroups.go")
+	f, err := os.Create("../../zone/" + zonename + "/spawngroups.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -88,7 +88,7 @@ var spawngroups []spawn.SpawnGroup = []spawn.SpawnGroup{
 	}
 	spawngroupstring = spawngroupstring[0:len(spawngroupstring)-2] + ")"
 
-	f, err = os.Create("../../" + zonename + "/spawnentries.go")
+	f, err = os.Create("../../zone/" + zonename + "/spawnentries.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -158,7 +158,7 @@ var spawnentries []spawn.SpawnEntry = []spawn.SpawnEntry{
 	}
 	fmt.Println("Generated", spawngroupCount, "spawnentries")
 
-	f, err = os.Create("../../" + zonename + "/spawn.go")
+	f, err = os.Create("../../zone/" + zonename + "/spawn.go")
 	if err != nil {
 		fmt.Println(err.Error())
 		return

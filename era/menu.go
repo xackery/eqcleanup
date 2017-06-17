@@ -18,18 +18,18 @@ import (
 func Menu(args ...string) (err error) {
 	//var err error
 	eraMenu := []menu.CommandOption{
-		menu.CommandOption{"aug", "Remove all augments", aug.Clean},
-		menu.CommandOption{"fabled", "Remove all fabled NPCs", fabled.Clean},
-		menu.CommandOption{"halloween", "Remove halloween event data", halloween.Clean},
-		menu.CommandOption{"item", "Remove all out of era items from Luclin onward", eraitem.Clean},
-		menu.CommandOption{"ldon", "Remove LDoN NPCs", ldon.Clean},
-		menu.CommandOption{"named", "Reduce the spawn rate of named mobs", named.Clean},
-		menu.CommandOption{"nexus", "Remove nexus NPCs", nexus.Clean},
-		menu.CommandOption{"rodent", "Remove rodents and exterminator quests", rodent.Clean},
-		menu.CommandOption{"shadowrest", "Remove shadowrest NPCs from East Commons", shadowrest.Clean},
-		menu.CommandOption{"soulbinder", "Remove soulbinder NPCs", soulbinder.Clean},
-		menu.CommandOption{"tribute", "Remove tribute NPCs", tribute.Clean},
-		menu.CommandOption{"quit", "Return to main menu", nil},
+		{"aug", "Remove all augments", aug.Clean},
+		{"fabled", "Remove all fabled NPCs", fabled.Clean},
+		{"halloween", "Remove halloween event data", halloween.Clean},
+		{"item", "Remove all out of era items from Luclin onward", eraitem.Clean},
+		{"ldon", "Remove LDoN NPCs", ldon.Clean},
+		{"named", "Reduce the spawn rate of named mobs", named.Clean},
+		{"nexus", "Remove nexus NPCs", nexus.Clean},
+		{"rodent", "Remove rodents and exterminator quests", rodent.Clean},
+		{"shadowrest", "Remove shadowrest NPCs from East Commons", shadowrest.Clean},
+		{"soulbinder", "Remove soulbinder NPCs", soulbinder.Clean},
+		{"tribute", "Remove tribute NPCs", tribute.Clean},
+		{"quit", "Return to main menu", nil},
 	}
 	menuOptions := menu.NewMenuOptions("'menu' for help [era]> ", 0)
 
