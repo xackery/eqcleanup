@@ -198,7 +198,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 	var result sql.Result
 	var affect int64
 	//Remove from spawngroup
-	result, err = db.Exec("DELETE FROM spawngroup WHERE id IN ?", idsString)
+	result, err = db.Exec(fmt.Sprintf("DELETE FROM spawngroup WHERE id IN (%s)", idsString))
 	if err != nil {
 		fmt.Println("Err removing from spawngroup:", err.Error())
 		return
@@ -215,7 +215,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 	totalRemoved += affect
 
 	//Remove from spawnentry
-	result, err = db.Exec("DELETE FROM spawnentry WHERE spawngroupid IN ? ", idsString)
+	result, err = db.Exec(fmt.Sprintf("DELETE FROM spawnentry WHERE spawngroupid IN (%s)", idsString))
 	if err != nil {
 		fmt.Println("Err removing from spawnentry:", err.Error())
 		return
@@ -232,7 +232,7 @@ func RemoveSpawnGroupAndEntryById(db *sqlx.DB, ids []int64) (totalRemoved int64,
 
 	//Remove from spawn2
 
-	result, err = db.Exec("DELETE FROM spawn2 WHERE spawngroupid IN ?", idsString)
+	result, err = db.Exec(fmt.Sprintf("DELETE FROM spawn2 WHERE spawngroupid IN (%s)", idsString))
 	if err != nil {
 		//fmt.Println("Err removing from spawngroupid:", err.Error())
 		return

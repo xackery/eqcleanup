@@ -8,169 +8,66 @@ import (
 
 //Flushes all possible ways to get an item, that I can think of.. except via quests and GM commands
 func RemoveAllInstancesOfItems(db *sqlx.DB, ids []int64) (totalRemoved int64, err error) {
+
 	fmt.Println("Removing", len(ids), "item ids")
-	for i, id := range ids {
-		if i%1000 == 0 {
-			fmt.Printf("%d,", i)
-		}
-		var affect int64
-		affect, err = DeleteQuery(db, "DELETE FROM inventory WHERE itemid = ?", id, "inventory")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
+	idsString := ""
+	for _, id := range ids {
+		idsString = fmt.Sprintf("%s%d, ", idsString, id)
+	}
+	idsString = idsString[0 : len(idsString)-2]
 
-		affect, err = DeleteQuery(db, "DELETE FROM lootdrop_entries WHERE item_id = ?", id, "lootdrop entries")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
+	var affect int64
+	var delList map[string]string = map[string]string{
+		"inventory":                 "itemid",
+		"lootdrop_entries":          "item_id",
+		"merchantlist":              "item",
+		"merchantlist_temp":         "itemid",
+		"guild_bank":                "itemid",
+		"ground_spawns":             "item",
+		"sharedbank":                "itemid",
+		"forage":                    "itemid",
+		"merc_inventory":            "item_id",
+		"tradeskill_recipe_entries": "item_id",
+		"buyer":                     "itemid",
+		"character_bandolier":       "item_id",
+		"character_corpse_items":    "item_id",
+		"character_pet_inventory":   "item_id",
+		"character_potionbelt":      "item_id",
+		"fishing":                   "itemid",
+		"item_tick":                 "it_itemid",
+		"keyring":                   "item_id",
+		"object_contents":           "itemid",
+		"pets_equipmentset_entries": "item_id",
+		"starting_items":            "itemid",
+		"tasks":                     "rewardid",
+		"titles":                    "item_id",
+		"trader":                    "item_id",
+		"veteran_reward_templates":  "item_id",
+	}
+	var result sql.Result
+	for table, field := range delList {
 
-		affect, err = DeleteQuery(db, "DELETE FROM merchantlist WHERE item = ?", id, "merchant list")
+		result, err = db.Exec(fmt.Sprintf("DELETE FROM %s WHERE %s IN (%s)", table, field, idsString))
 		if err != nil {
+			fmt.Println("Err removing from", table, ":", err.Error())
 			return
 		}
-		totalRemoved += affect
 
-		affect, err = DeleteQuery(db, "DELETE FROM merchantlist_temp WHERE itemid = ?", id, "merchant list")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM guild_bank WHERE itemid = ?", id, "guild bank")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM ground_spawns WHERE item = ?", id, "ground spawn")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		//Delete any tradeskill recipes that use this as a reagent
-		affect, err = DeleteQuery(db, "DELETE FROM tradeskill_recipe WHERE tradeskill_recipe.id IN (SELECT recipe_id FROM tradeskill_recipe_entries WHERE tradeskill_recipe_entries.item_id = ?)", id, "tradeskill recipes")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM sharedbank WHERE itemid  = ?", id, "shared bank")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM forage WHERE itemid  = ?", id, "forage")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM merc_inventory WHERE item_id  = ?", id, "merc inventory")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM tradeskill_recipe_entries WHERE item_id = ?", id, "tradeskill recipe entries")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM buyer WHERE itemid = ?", id, "buyer")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM character_bandolier WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM character_corpse_items WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM character_pet_inventory WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM character_potionbelt WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM fishing WHERE itemid = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM item_tick WHERE it_itemid = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM keyring WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM object_contents WHERE itemid = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM pets_equipmentset_entries WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM starting_items WHERE itemid = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM tasks WHERE rewardid = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM titles WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM trader WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
-		totalRemoved += affect
-
-		affect, err = DeleteQuery(db, "DELETE FROM veteran_reward_templates WHERE item_id = ?", id, "bandolier")
-		if err != nil {
-			return
-		}
+		affect, _ = result.RowsAffected()
+		fmt.Println("Removed", affect, table, "entries")
 		totalRemoved += affect
 	}
+
+	result, err = db.Exec(fmt.Sprintf("DELETE FROM tradeskill_recipe WHERE tradeskill_recipe.id IN (SELECT recipe_id FROM tradeskill_recipe_entries WHERE tradeskill_recipe_entries.item_id IN (%s))", idsString))
+	if err != nil {
+		fmt.Println("Err removing from tradeskill_recipe", ":", err.Error())
+		return
+	}
+
+	affect, _ = result.RowsAffected()
+	fmt.Println("Removed", affect, "tradeskill_recipe entries")
+	totalRemoved += affect
+
 	fmt.Printf("Done.\n")
 
 	return

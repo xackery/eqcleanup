@@ -32,7 +32,11 @@ func Clean(args ...string) (err error) {
 	}
 	//#checkpoint_ten
 
-	spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
+	totalRemoved, err := spawngroup.RemoveSpawnGroupAndEntryById(db, ids)
+	if err != nil {
+		return
+	}
+	fmt.Println("Removed", totalRemoved, "spawngroup and entries")
 
 	//Items
 	ids = loadIds()
