@@ -96,6 +96,9 @@ func loadIds() (ids []int64) {
 		62243,  //Exquisite Silk Turban
 	}
 
+	for i := int64(62250); i < 62587; i++ { //Ldon ish
+		ids = append(ids, i)
+	}
 	for i := int64(41000); i < 48891; i++ {
 		ids = append(ids, i)
 	}
