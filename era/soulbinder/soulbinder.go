@@ -9,7 +9,7 @@ import (
 	"github.com/xackery/eqcleanup/tools/spawngroup"
 )
 
-var focus = "nexus"
+var focus = "soulbinder"
 
 func Clean(args ...string) (err error) {
 	db, err := eqdb.Load()
@@ -69,7 +69,6 @@ func Clean(args ...string) (err error) {
 		"rathemtn/Soulbinder_Zlippi.pl",
 		"shadowhaven/Soulbinder_Nansin.pl",
 		"sharvahl/Soulbinder_Ghula.pl",
-		"southro/Soulbinder_Silandra.pl",
 		"sro/Soulbinder_Silandra.pl",
 	}
 
