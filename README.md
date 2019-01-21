@@ -19,6 +19,8 @@ Cleans up Project EQ's database and tweaks it for different era content.
   - Shadowrest - Remove shadowrest NPCs from East Commons
   - Soulbinder - Remove soulbinder NPCs
   - Tribute - Remove tribute NPCs
+
+## Work In Progress (Not Yet Implemented)
 - Zone Category - Transform zones to older versions
   - Cazic Thule - Creates an instance of the classic zone
   - East Commonlands - Creates an instance of the classic zone
@@ -26,4 +28,5 @@ Cleans up Project EQ's database and tweaks it for different era content.
   - Droga - Creates an instance of the classic zone
   - Nurga - Creates an instance of the classic zone
   - Paw - Creates an instance of the classic zone
+  - Lavastorm
 ### 
