@@ -1,5 +1,5 @@
 #a temp dir just so it can delete quests on testing
-quests/
+/quests/
 p2002/
 db/
 
