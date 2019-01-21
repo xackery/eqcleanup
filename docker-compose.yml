@@ -1,0 +1,14 @@
+version: '2'
+services:
+  database:
+    image: bitnami/mariadb:latest
+    environment:
+      - MARIADB_DATABASE=eqemu
+      - MARIADB_USER=eqemu
+      - MARIADB_PASSWORD=eqemupass
+      - MARIADB_ROOT_PASSWORD=eqemupass
+      - ALLOW_EMPTY_PASSWORD=no
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/bitnami/mariadb

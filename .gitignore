@@ -1,5 +1,7 @@
 #a temp dir just so it can delete quests on testing
 quests/
+p2002/
+db/
 
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
